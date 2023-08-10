@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 
 # load the Environment Variables. 
 load_dotenv()
-st.set_page_config(page_title="OpenAssistant Powered Chat App")
+st.set_page_config(page_title="OpenAssistant Powered Fashion Designer App")
 
 # Sidebar contents
 with st.sidebar:
@@ -21,16 +21,16 @@ with st.sidebar:
 
     ''')
     add_vertical_space(3)
-    st.write('Made with ❤️ by [Prompt Engineer](https://youtube.com/@engineerprompt)')
+    st.write('Made with ❤️ by Raul')
 
-st.header("Your Personal Assistant 💬")
+st.header("Your Fashion Outfit Designer 💬")
 
 def main():
 
     # Generate empty lists for generated and user.
     ## Assistant Response
     if 'generated' not in st.session_state:
-        st.session_state['generated'] = ["I'm Assistant, How may I help you?"]
+        st.session_state['generated'] = ["I'm your Fashion Outfit Generator, How may I help you?"]
 
     ## user question
     if 'user' not in st.session_state:
@@ -92,3 +92,5 @@ if __name__ == '__main__':
 
 
 # C:\Users\rb341\AppData\Roaming\Python\Python310\Scripts\streamlit.exe run huggingChat.py
+
+# autotrain llm --train --project_name your_project_name --model OpenAssistant/oasst-sft-4-pythia-12b-epoch-3.5 --data_path D:\conversational-fashion-outfit-generator\data\fashion_data.csv --use_peft --use_int4 --learning_rate 2e-4  --train_batch_size 2  --num_train_epochs 3  --trainer sft  --model_max_length 2048  --push_to_hub  --repo_id Raul909/Conversational-fashion-outfit-generator
