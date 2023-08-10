@@ -1,0 +1,7 @@
+streamlit
+hugchat
+streamlit-chat
+streamlit-extras
+langchain
+pandas
+huggingface_hub
