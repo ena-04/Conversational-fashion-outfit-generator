@@ -1,35 +1,55 @@
-from bardapi import Bard
 import streamlit as st
-import streamlit_chat as stc
+from bardapi import Bard
 import os
+from dotenv.main import load_dotenv
 
-# Set your Bard API key
-os.environ["_BARD_API_KEY"] = "your_api_key"
+# Load environment variables
+load_dotenv()
+token = os.environ.get("BARD_API_KEY")
 
-st.title("Google Bard")
+# Create a Streamlit app title
+st.title("Fashion Outfit Designer with Bard API")
 
-def response_api(prompt):
-    message = Bard().get_answer(str(prompt))['content']
-    return message
+# Create a Bard instance
+bard = Bard(token=token)
 
-def user_input():
-    input_text = st.text_input("Enter Your Prompt:")
-    return input_text
+# Create a text input for user prompt
+user_prompt = st.text_input("Enter your prompt:")
 
-if 'generate' not in st.session_state:
-    st.session_state['generate'] = []
+# If the user enters a prompt, get and display the response
+if user_prompt:
+    result = bard.get_answer(user_prompt)
+    bard_response = result['content']
 
-if 'past' not in st.session_state:
-    st.session_state['past'] = []
+    # Remove image descriptions from each suggestion
+    lines = bard_response.split('\n')
+    filtered_lines = [line for line in lines if not line.startswith("[Image")]
 
-user_text = user_input()
+    # Join the filtered lines back into a single string
+    filtered_response = "\n".join(filtered_lines)
 
-if user_text:
-    output = response_api(user_text)
-    st.session_state.generate.append(output)
-    st.session_state.past.append(user_text)
+    st.write("Bard Response:", filtered_response)
 
-if st.session_state['generate']:
-    for i in range(len(st.session_state['generate']) - 1, -1, -1):
-        stc.message(st.session_state["past"][i], is_user=True, key=str(i) + '_user')
-        stc.message(st.session_state["generate"][i], key=str(i))
+# Sidebar contents and other layout elements
+with st.sidebar:
+    st.title('Fashion Outfit Designer Chat')
+    st.markdown('''
+    ## About
+    This app combines Bard API with a fashion outfit designer chatbot built using LangChain.
+
+    ''')
+
+st.header("Your Fashion Outfit Designer 💬")
+
+# Initialize session state lists
+if 'user_inputs' not in st.session_state:
+    st.session_state.user_inputs = []
+if 'generated_responses' not in st.session_state:
+    st.session_state.generated_responses = []
+
+# Main loop
+if st.session_state.user_inputs:
+    for i in range(len(st.session_state.user_inputs)):
+        st.write("You:", st.session_state.user_inputs[i])
+        st.write("Outfit Designer:", st.session_state.generated_responses[i])
+        
