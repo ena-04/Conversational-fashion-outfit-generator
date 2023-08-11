@@ -4,6 +4,18 @@ import os
 from dotenv.main import load_dotenv
 import sys
 
+
+
+
+
+from flask_cors import CORS, cross_origin
+
+
+
+
+
+
+
 # Load environment variables
 load_dotenv()
 
@@ -15,32 +27,33 @@ bard = Bard(token=token)
 
 # Create a Flask app instance
 app = Flask(__name__)
-
-# Define the index route
-@app.route('/', methods=['GET', 'POST'])
-def index():
-    if request.method == 'POST':
-        user_prompt = request.form['user_prompt']
-
-        if user_prompt:
-            result = bard.get_answer(user_prompt)
-            bard_response = result['content']
-            
-            lines = bard_response.split('\n')
-            filtered_lines = [line for line in lines if not line.startswith("[Image")]
-            filtered_response = "\n".join(filtered_lines)
-            
-            # Integrate recommendation API here
-            recommendation_response = get_recommendations(user_prompt)
-            
-            return render_template('index.html', bard_response=filtered_response, user_prompt=user_prompt, recommendation_response=recommendation_response)
-
-    return render_template('index.html', bard_response=None, user_prompt=None, recommendation_response=None)
+CORS(app)
 
 def get_recommendations(user_message):
     # Replace this with your actual recommendation logic
     bot_response = "Here are some recommended outfits for: " + user_message
     return bot_response
+
+
+@app.route('/api/recommendations', methods=['POST'])
+@cross_origin(origin='*')
+def get_recommendations():
+    user_message = request.json['userMessage']
+    # Replace this with your Gen AI integration logic
+
+    if user_message:
+               result = bard.get_answer(user_message)
+               bard_response = result['content']
+            
+               lines = bard_response.split('\n')
+               filtered_lines = [line for line in lines if not line.startswith("[Image")]
+               filtered_response = "\n".join(filtered_lines)
+
+
+
+    app.logger.warning("A warning message.")
+    bot_response = filtered_response
+    return jsonify({'bot_response': bot_response})
 
 if __name__ == '__main__':
     app.run(debug=True)
