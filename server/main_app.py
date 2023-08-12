@@ -22,11 +22,12 @@ bard = Bard(token=token)
 app = Flask(__name__)
 CORS(app)
 
+
 def bold_text(text):
-    text1 = text.replace(' **', ' <b>')
-    text2 = text1.replace('** ', '</b> ')
+    text1 = text.replace(" **", " <b>")
+    text2 = text1.replace("** ", "</b> ")
     return text2
-    
+
 
 def get_recommendations(user_message):
     # Replace this with your actual recommendation logic
@@ -41,7 +42,9 @@ def get_recommendations():
     # Replace this with your Gen AI integration logic
 
     if user_message:
-        result = bard.get_answer(user_message)
+        result = bard.get_answer(
+            user_message + " Suggest entire outfit with specific details."
+        )
         bard_response = result["content"]
 
         lines = bard_response.split("\n")
