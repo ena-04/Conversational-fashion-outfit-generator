@@ -17,10 +17,13 @@ token = os.environ.get("BARD_API_KEY")
 # Create a Bard instance
 bard = Bard(token=token)
 
+
 # Create a Flask app instance
 app = Flask(__name__)
 CORS(app)
 
+def bold_text(text):
+    return text.replace('**', '<b>').replace('</b>', '</b>')
 
 def get_recommendations(user_message):
     # Replace this with your actual recommendation logic
@@ -43,7 +46,7 @@ def get_recommendations():
         filtered_response = "\n".join(filtered_lines)
 
     app.logger.warning("A warning message.")
-    bot_response = filtered_response
+    bot_response = bold_text(filtered_response)
     return jsonify({"bot_response": bot_response})
 
 

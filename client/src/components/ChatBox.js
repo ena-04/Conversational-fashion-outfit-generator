@@ -102,7 +102,9 @@ function ChatBox() {
                             : "rounded py-2 px-3 bg-gray-50"
                         }
                       >
-                        <p className="text-sm mt-1">{message.text}</p>
+                        <p className="text-sm mt-1">{message.text.split("\n").map((i) => {
+                            return <p>{i}</p>;
+                          })}</p>
                       </div>
                     </div>
                   ))}
