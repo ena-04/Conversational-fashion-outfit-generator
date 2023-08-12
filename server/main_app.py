@@ -23,7 +23,10 @@ app = Flask(__name__)
 CORS(app)
 
 def bold_text(text):
-    return text.replace('**', '<b>').replace('</b>', '</b>')
+    text1 = text.replace(' **', ' <b>')
+    text2 = text1.replace('** ', '</b> ')
+    return text2
+    
 
 def get_recommendations(user_message):
     # Replace this with your actual recommendation logic
