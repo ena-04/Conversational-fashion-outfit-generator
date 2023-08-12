@@ -5,15 +5,7 @@ from dotenv.main import load_dotenv
 import sys
 
 
-
-
-
 from flask_cors import CORS, cross_origin
-
-
-
-
-
 
 
 # Load environment variables
@@ -29,31 +21,31 @@ bard = Bard(token=token)
 app = Flask(__name__)
 CORS(app)
 
+
 def get_recommendations(user_message):
     # Replace this with your actual recommendation logic
     bot_response = "Here are some recommended outfits for: " + user_message
     return bot_response
 
 
-@app.route('/api/recommendations', methods=['POST'])
-@cross_origin(origin='*')
+@app.route("/api/recommendations", methods=["POST"])
+@cross_origin(origin="*")
 def get_recommendations():
-    user_message = request.json['userMessage']
+    user_message = request.json["userMessage"]
     # Replace this with your Gen AI integration logic
 
     if user_message:
-               result = bard.get_answer(user_message)
-               bard_response = result['content']
-            
-               lines = bard_response.split('\n')
-               filtered_lines = [line for line in lines if not line.startswith("[Image")]
-               filtered_response = "\n".join(filtered_lines)
+        result = bard.get_answer(user_message)
+        bard_response = result["content"]
 
-
+        lines = bard_response.split("\n")
+        filtered_lines = [line for line in lines if not line.startswith("[Image")]
+        filtered_response = "\n".join(filtered_lines)
 
     app.logger.warning("A warning message.")
     bot_response = filtered_response
-    return jsonify({'bot_response': bot_response})
+    return jsonify({"bot_response": bot_response})
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     app.run(debug=True)
