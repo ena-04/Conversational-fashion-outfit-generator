@@ -102,9 +102,15 @@ function ChatBox() {
                             : "rounded py-2 px-3 bg-gray-50"
                         }
                       >
-                        <p className="text-sm mt-1">{message.text.split("\n").map((i) => {
-                            return <p>{i}</p>;
-                          })}</p>
+                        <p className="text-sm mt-1">
+                          {message.text.split("\n").map((i) => {
+                            return (
+                              <p>
+                                <div dangerouslySetInnerHTML={{ __html: i }} />
+                              </p>
+                            );
+                          })}
+                        </p>
                       </div>
                     </div>
                   ))}
@@ -119,6 +125,12 @@ function ChatBox() {
                     type="text"
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        // 👇 Get input value
+                        sendMessage();
+                      }
+                    }}
                   />
                 </div>
                 <button onClick={sendMessage}>
