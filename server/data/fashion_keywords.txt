@@ -1,4 +1,4 @@
-Clothing, apparel, attire, garments, outfits, wardrobe, dress, suit, outfit, ensemble, attire, attire, attire, costume, dress, gown, uniform, vestment, accessories, bags, shoes, jewelry, hats, scarves, belts, sunglasses, gloves, handbags, footwear, headwear,
+Fashion, Clothing, apparel, attire, garments, outfits, wardrobe, dress, suit, outfit, ensemble, attire, attire, attire, costume, dress, gown, uniform, vestment, accessories, bags, shoes, jewelry, hats, scarves, belts, sunglasses, gloves, handbags, footwear, headwear,
 Fabrics, textiles, materials, fabrics, silk, cotton, wool, leather, denim, polyester, velvet, lace, satin,
 Styles, trendy, chic, elegant, casual, formal, vintage, modern, classic, bohemian, urban, minimalist, athleisure,
 Brands, designer brands, luxury brands, high-end brands, fashion labels, fashion houses,
