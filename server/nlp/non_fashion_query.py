@@ -15,9 +15,19 @@ bard = Bard(token=token)
 # Load the spaCy English model
 nlp = spacy.load("en_core_web_lg")
 
+# Read the content of the text file
+with open("D:\\conversational-fashion-outfit-generator\\server\\data\\fashion_keywords.txt", "r") as file:
+    content = file.read()
+
+# Split the content into words based on commas
+words = content.split(',')
+
+# Remove leading and trailing whitespace from each word and create a list
+word_list = [word.strip() for word in words]
+
 def is_fashion_related(query):
     # Define fashion-related keywords
-    fashion_keywords = ["outfit", "clothing", "style", "Fashion trends"]
+    fashion_keywords = word_list
     
     # Tokenize the query using spaCy
     doc = nlp(query.lower())
@@ -47,6 +57,6 @@ def fashion_chatbot(user_message):
         return "I'm here to talk about fashion trends and outfits. Please ask me a fashion-related question."
 
 # Example usage
-user_query = "What is the Fashion trends now?"
+user_query = "What is the fashion trends now?"
 response = fashion_chatbot(user_query)
 print(response)
