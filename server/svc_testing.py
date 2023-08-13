@@ -8,7 +8,7 @@ loaded_vectorizer = joblib.load('D:\\conversational-fashion-outfit-generator\\se
 new_input = [
     "What should I wear for a formal event?",
     "Any suggestions for casual wear?",
-    "Hi How are you"
+    "What is the highlights of this outfit"
 ]
 
 # Transform new data using the loaded vectorizer
