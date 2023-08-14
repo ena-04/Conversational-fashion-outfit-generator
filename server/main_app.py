@@ -43,8 +43,9 @@ def get_recommendations():
 
     if user_message:
         result = bard.get_answer(
-            user_message + " Suggest entire outfit with specific details."
+            user_message
         )
+        print(result)
         bard_response = result["content"]
 
         lines = bard_response.split("\n")

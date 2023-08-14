@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import SpeechRecognition, {
-  useSpeechRecognition,
-} from "react-speech-recognition";
+import Mic from "./Mic";
 
 function ChatBox() {
   const [input, setInput] = useState("");
@@ -41,26 +39,67 @@ function ChatBox() {
     }
   };
 
-  //recorder
   const [isRecording, setisRecording] = useState(false);
-  const startRecording = () => {
-    // setInput(transcript);
-    setisRecording(true);
-    SpeechRecognition.startListening({ continuous: true, language: "en-IN" });
-  };
-  const { transcript, resetTranscript, browserSupportsSpeechRecognition } =
-    useSpeechRecognition();
+  const [note, setNote] = useState(null);
+  const [notesStore, setnotesStore] = useState([]);
 
-  const stopRecording = () => {
-    setInput(transcript);
-    setisRecording(false);
-    SpeechRecognition.stopListening();
-    resetTranscript();
+  const SpeechRecognition =
+    window.SpeechRecognition || window.webkitSpeechRecognition;
+  const microphone = new SpeechRecognition();
+
+  microphone.continuous = true;
+  microphone.interimResults = true;
+  microphone.lang = "en-US";
+
+  let isRestarting = false; // Add a flag to control restarts
+
+  const startRecordController = () => {
+    if (isRecording) {
+      microphone.start();
+    } else {
+      microphone.stop();
+    }
+
+    microphone.onstart = () => {
+      console.log("microphones on");
+    };
+
+    microphone.onend = () => {
+      if (isRestarting) {
+        console.log("continue..");
+        microphone.start();
+      }
+    };
+
+    microphone.onresult = (event) => {
+      const recordingResult = Array.from(event.results)
+        .map((result) => result[0])
+        .map((result) => result.transcript)
+        .join("");
+      console.log(recordingResult);
+      setInput(recordingResult);
+    };
+
+    microphone.onerror = (event) => {
+      console.log(event.error);
+    };
   };
 
-  if (!browserSupportsSpeechRecognition) {
-    return null;
-  }
+  useEffect(() => {
+    startRecordController();
+  }, [isRecording]);
+
+  const storeNote = () => {
+    setnotesStore([...notesStore, note]);
+    setNote("");
+  };
+
+  // Add a function to control restarting
+  const toggleRestarting = () => {
+    isRestarting = !isRestarting;
+  };
+
+  // Call toggleRestarting when needed, e.g., in a button click event handler
 
   return (
     <div>
@@ -147,7 +186,7 @@ function ChatBox() {
                   <input
                     className="w-full border rounded px-2 py-2"
                     type="text"
-                    value={isRecording ? transcript : input}
+                    value={input}
                     onChange={(e) => setInput(e.target.value)}
                     onKeyDown={(e) => {
                       if (e.key === "Enter") {
@@ -157,21 +196,24 @@ function ChatBox() {
                     }}
                   />
                 </div>
-
-                <div className="">
-                  <button onClick={sendMessage} className="m-1">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                      className="w-6 h-6"
-                    >
-                      <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" />
-                    </svg>
-                  </button>
+                <button onClick={sendMessage}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    className="w-6 h-6"
+                  >
+                    <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" />
+                  </svg>
+                </button>
+                <div>
                   <button
-                    className="m-1"
-                    onClick={isRecording ? stopRecording : startRecording}
+                    onClick={() => {
+                      setisRecording((prevState) => {
+                        // if (prevState) microphone.stop();
+                        return !prevState;
+                      });
+                    }}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -195,6 +237,7 @@ function ChatBox() {
                       )}
                     </svg>
                   </button>
+                  <p>{note}</p>
                 </div>
               </div>
             </div>
