@@ -1,115 +1,115 @@
 
-Hello
-Hi
-Hey
-Good morning
-Good afternoon
-Good evening
-Howdy
-What's up?
-Hey there
-Hi chatbot
-Greetings
-Morning
-Evening
-Yo
-Hiya
+Hello,
+Hi,
+Hey,
+Good morning,
+Good afternoon,
+Good evening,
+Howdy,
+What's up?,
+Hey there,
+Hi chatbot,
+Greetings,
+Morning,
+Evening,
+Yo,
+Hiya,
 
-Thanks
-Thank you
-Appreciate it
-Got it
-I understand
-Makes sense
-I see
-That's helpful
-Perfect
-No problem
-Alright
-OK
-Sounds good
-Cool
-Understood
-You're right
-That works
-I agree
-I'm with you
-Exactly
+Thanks,
+Thank you,
+Appreciate it,
+Got it,
+I understand,
+Makes sense,
+I see,
+That's helpful,
+Perfect,
+No problem,
+Alright,
+OK,
+Sounds good,
+Cool,
+Understood,
+You're right,
+That works,
+I agree,
+I'm with you,
+Exactly,
 
-How are you?
-Hey, chatbot
-Hello there
-Hi, there
-Good to see you
-Hi, AI
-How's it going?
-Is anyone there?
-Hello, chatbot
-What's new?
-Long time no talk
-G'day
-Hey, buddy
-Hola
-Bonjour
+How are you?,
+Hey chatbot,
+Hello there,
+Hi there,
+Good to see you,
+Hi AI,
+How's it going?,
+Is anyone there?,
+Hello chatbot,
+What's new?,
+Long time no talk,
+G'day,
+Hey buddy,
+Hola,
+Bonjour,
 
-You're welcome
-I appreciate that
-Thanks for the info
-That's helpful, thanks
-Thanks for clarifying
-I got it, thanks
-Makes sense, thanks
-I see, thank you
-That's great, thanks
-That's clear, thanks
-I understand, thanks
-Cool, thank you
-Thanks for the help
-I'm grateful for that
-I'm good with that
-Much appreciated
-I'm with you, thanks
-Thanks for the explanation
-Thanks for your time
-That works, thank you
+You're welcome,
+I appreciate that,
+Thanks for the info,
+That's helpful thanks,
+Thanks for clarifying,
+I got it thanks,
+Makes sense, thanks,
+I see, thank you,
+That's great thanks,
+That's clear thanks,
+I understand thanks,
+Cool thank you,
+Thanks for the help,
+I'm grateful for that,
+I'm good with that,
+Much appreciated,
+I'm with you thanks,
+Thanks for the explanation,
+Thanks for your time,
+That works thank you,
 
 
-Sup
-Yo, bot
-Hey, how's it going?
-Morning, bot
-What's poppin'?
-Hi, virtual assistant
-Howdy, AI
-Hey, you there?
-Hi, friend
-Greetings, bot
-Hello, virtual friend
-Hi, AI buddy
-What's cooking?
-Hey, digital helper
-Wassup, chatbot
+Sup,
+Yo bot,
+Hey how's it going?,
+Morning bot,
+What's poppin'?,
+Hi virtual assistant,
+Howdy AI,
+Hey you there?,
+Hi friend,
+Greetings bot,
+Hello, virtual friend,
+Hi AI buddy,
+What's cooking?,
+Hey, digital helper,
+Wassup, chatbot,
 
-Perfect, thanks
-That makes sense
-I'm on board
-I'm with you, thanks
-That works, thanks
-Sounds good, thanks
-Alright, thank you
-Cool, thanks a lot
-Got it, thank you
-Appreciate the help
-I'm grateful, thanks
-You're a lifesaver
-Thanks for the info
-Thanks, you rock!
-That's clear, thanks
-I'm in, thank you
-I understand now, thanks
-You're the best, thanks
-Thanks, you're awesome
-Thanks, that's helpful
+Perfect, thanks,
+That makes sense,
+I'm on board,
+I'm with you thanks,
+That works thanks,
+Sounds good thanks,
+Alright thank you,
+Cool thanks a lot,
+Got it thank you,
+Appreciate the help,
+I'm grateful thanks,
+You're a lifesaver,
+Thanks for the info,
+Thanks, you rock!,
+That's clear, thanks,
+I'm in thank you,
+I understand now thanks,
+You're the best thanks,
+Thanks, you're awesome,
+Thanks that's helpful,
 
 Hey, bot, can you help?
 How's it going, chatbot?

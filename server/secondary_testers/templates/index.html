@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Search Results</title>
+</head>
+<body>
+    <h1>Image Search Results</h1>
+    
+    {% for result in results %}
+    <h2>{{ result.query }}</h2>
+    <div>
+        {% for image in result.images %}
+        <img src="{{ image }}" alt="Image">
+        <br>
+        <a href="{{ image }}" target="_blank">{{ image }}</a>
+        <br>
+        {% endfor %}
+    </div>
+    {% endfor %}
+</body>
+</html>

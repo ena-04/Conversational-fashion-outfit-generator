@@ -20,7 +20,7 @@ bard = Bard(token=token)
 vectorizer = TfidfVectorizer()
 
 # Read the content of the text file
-with open("D:\\Neha\\web development\\Conversational-fashion-outfit-generator\\server\\data\\fashion_keywords.txt", "r") as file:
+with open("D:\\conversational-fashion-outfit-generator\\server\\data\\greeting_keywords.txt", "r") as file:
     content = file.read()
 
 # Split the content into phrases based on commas
@@ -74,7 +74,7 @@ def fashion_chatbot(user_message):
         matches.append((user_token, best_match, max_similarity))
 
     # Print the positive matches
-    positive_matches = [(token, match, similarity) for token, match, similarity in matches if similarity > 0]
+    positive_matches = [(token, match, similarity) for token, match, similarity in matches if similarity > 0.7]
 
 
     for token, match, similarity in positive_matches:
@@ -98,6 +98,6 @@ def fashion_chatbot(user_message):
         return "I'm here to talk about fashion trends and outfits. Please ask me a fashion-related question."
 
 # Example usage
-user_query = "What outfit should i wear today?"
+user_query = "Hello ! what is the news today ?"
 response = fashion_chatbot(user_query)
 print(response)
