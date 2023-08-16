@@ -1,0 +1,8408 @@
+# from __future__ import unicode_literals, print_function
+# import plac
+# import random
+# from pathlib import Path
+# import spacy
+# from tqdm import tqdm
+
+# nlp1 = spacy.load("en_core_web_md")
+
+TRAIN_DATA = [
+        [
+            "I'm attending a job interview, any outfit tips?\r",
+            {
+                "entities": [
+                    [
+                        16,
+                        19,
+                        "FORMAL"
+                    ],
+                    [
+                        20,
+                        29,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me create a chic summer office look.\r",
+            {
+                "entities": [
+                    [
+                        29,
+                        35,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me create a chic summer work look.\r",
+            {
+                "entities": [
+                    [
+                        29,
+                        33,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me create a fashionable summer work outfit.\r",
+            {
+                "entities": [
+                    [
+                        36,
+                        40,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me create a sophisticated office look.\r",
+            {
+                "entities": [
+                    [
+                        31,
+                        37,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me create a stylish summer work look.\r",
+            {
+                "entities": [
+                    [
+                        32,
+                        36,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me put together a chic office look.\r",
+            {
+                "entities": [
+                    [
+                        28,
+                        34,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me put together a polished office look.\r",
+            {
+                "entities": [
+                    [
+                        32,
+                        38,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest a business-casual ensemble.\r",
+            {
+                "entities": [
+                    [
+                        10,
+                        25,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What's a modern office outfit with a twist?\r",
+            {
+                "entities": [
+                    [
+                        16,
+                        22,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What outfit would be suitable for a professional conference?\r",
+            {
+                "entities": [
+                    [
+                        36,
+                        48,
+                        "FORMAL"
+                    ],
+                    [
+                        49,
+                        59,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What outfit would be suitable for a business conference?\r",
+            {
+                "entities": [
+                    [
+                        36,
+                        44,
+                        "FORMAL"
+                    ],
+                    [
+                        45,
+                        55,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What outfit would be suitable for a formal business meeting?\r",
+            {
+                "entities": [
+                    [
+                        36,
+                        42,
+                        "FORMAL"
+                    ],
+                    [
+                        43,
+                        51,
+                        "FORMAL"
+                    ],
+                    [
+                        52,
+                        59,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What outfit would be suitable for a business casual work setting?\r",
+            {
+                "entities": [
+                    [
+                        36,
+                        44,
+                        "FORMAL"
+                    ],
+                    [
+                        45,
+                        51,
+                        "CASUAL"
+                    ],
+                    [
+                        52,
+                        56,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What's a trendy outfit for a rooftop bar night with colleagues?\r",
+            {
+                "entities": [
+                    [
+                        52,
+                        62,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What outfit would be suitable for a business presentation?\r",
+            {
+                "entities": [
+                    [
+                        36,
+                        44,
+                        "FORMAL"
+                    ],
+                    [
+                        45,
+                        57,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I'm looking for an outfit to wear to a formal dinner, any suggestions?\r",
+            {
+                "entities": [
+                    [
+                        39,
+                        45,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What outfit would be suitable for a professional networking event?\r",
+            {
+                "entities": [
+                    [
+                        36,
+                        48,
+                        "FORMAL"
+                    ],
+                    [
+                        49,
+                        59,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What outfit would be appropriate for a corporate conference?\r",
+            {
+                "entities": [
+                    [
+                        39,
+                        48,
+                        "FORMAL"
+                    ],
+                    [
+                        49,
+                        59,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What outfit would be appropriate for a creative team-building event?\r",
+            {
+                "entities": [
+                    [
+                        48,
+                        61,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I'm looking for an outfit to wear to a graduation ceremony, any suggestions?\r",
+            {
+                "entities": [
+                    [
+                        39,
+                        49,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What outfit would be appropriate for a semi-formal evening event?\r",
+            {
+                "entities": [
+                    [
+                        39,
+                        50,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I'm looking for an outfit for a job fair, any suggestions?\r",
+            {
+                "entities": [
+                    [
+                        32,
+                        35,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I need ideas for a business casual look for a job interview.\r",
+            {
+                "entities": [
+                    [
+                        19,
+                        27,
+                        "FORMAL"
+                    ],
+                    [
+                        28,
+                        34,
+                        "CASUAL"
+                    ],
+                    [
+                        46,
+                        49,
+                        "FORMAL"
+                    ],
+                    [
+                        50,
+                        59,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What would be an appropriate attire for an Indian engagement party?\r",
+            {
+                "entities": [
+                    [
+                        50,
+                        60,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        61,
+                        66,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Can you recommend an outfit for a traditional Kathak dance performance?\r",
+            {
+                "entities": [
+                    [
+                        34,
+                        45,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        46,
+                        52,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What would be a suitable attire for an Indian pre-wedding ceremony?\r",
+            {
+                "entities": [
+                    [
+                        46,
+                        57,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Can you recommend an outfit for a traditional Bharatanatyam dance performance?\r",
+            {
+                "entities": [
+                    [
+                        34,
+                        45,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        46,
+                        59,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Can you recommend an outfit for a traditional Mohiniyattam dance performance?\r",
+            {
+                "entities": [
+                    [
+                        34,
+                        45,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        46,
+                        58,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I'm going to a temple festival, what should I wear to respect the cultural norms?\r",
+            {
+                "entities": [
+                    [
+                        15,
+                        21,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        66,
+                        74,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I need ideas for a traditional outfit to wear during a Raksha Bandhan celebration.\r",
+            {
+                "entities": [
+                    [
+                        19,
+                        30,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        55,
+                        69,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What would be a suitable attire for an Indian Mehendi ceremony?\r",
+            {
+                "entities": [
+                    [
+                        46,
+                        53,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Can you recommend an outfit for a traditional Kuchipudi dance performance?\r",
+            {
+                "entities": [
+                    [
+                        34,
+                        45,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        46,
+                        55,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What's a suitable outfit for a traditional Garba dance night?\r",
+            {
+                "entities": [
+                    [
+                        31,
+                        42,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        43,
+                        48,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I'm attending a traditional Indian wedding, what's an appropriate attire for a family member?\r",
+            {
+                "entities": [
+                    [
+                        16,
+                        27,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        35,
+                        42,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I'm attending a traditional Indian wedding, what's a suitable outfit for a close relative?\r",
+            {
+                "entities": [
+                    [
+                        16,
+                        27,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        35,
+                        42,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I'm going to an Indian wedding as a guest, what's an appropriate traditional outfit?\r",
+            {
+                "entities": [
+                    [
+                        23,
+                        30,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        65,
+                        76,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I'm attending a temple festival, what should I wear in keeping with Indian traditions?\r",
+            {
+                "entities": [
+                    [
+                        16,
+                        22,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        75,
+                        85,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I have a family wedding to attend, what's a suitable traditional outfit?\r",
+            {
+                "entities": [
+                    [
+                        16,
+                        23,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        53,
+                        64,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I need ideas for a traditional outfit to wear during a Pooja ceremony.\r",
+            {
+                "entities": [
+                    [
+                        19,
+                        30,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        55,
+                        60,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I'm attending a Sangeet ceremony, can you suggest a stylish Indian ensemble?\r",
+            {
+                "entities": [
+                    [
+                        16,
+                        23,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I want to dress up in Indian wear for a cultural event, any recommendations?\r",
+            {
+                "entities": [
+                    [
+                        40,
+                        48,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I'm going to an Indian wedding, what's a stylish yet traditional outfit?\r",
+            {
+                "entities": [
+                    [
+                        23,
+                        30,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        53,
+                        64,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I'm attending a temple event, what should I wear according to Indian customs?\r",
+            {
+                "entities": [
+                    [
+                        16,
+                        22,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        69,
+                        76,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I'm looking for a traditional outfit for a Tamil New Year gathering, can you assist?\r",
+            {
+                "entities": [
+                    [
+                        18,
+                        29,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        43,
+                        57,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I'm going to an Indian wedding as a close relative, what's a suitable traditional outfit?\r",
+            {
+                "entities": [
+                    [
+                        23,
+                        30,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        70,
+                        81,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I'm attending a temple visit, what should I wear to show respect?\r",
+            {
+                "entities": [
+                    [
+                        16,
+                        22,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I'm going to a traditional Indian wedding, what's an appropriate outfit choice?\r",
+            {
+                "entities": [
+                    [
+                        15,
+                        26,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        34,
+                        41,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I'm attending a temple festival, what should I wear according to Indian customs?\r",
+            {
+                "entities": [
+                    [
+                        16,
+                        22,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        72,
+                        79,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What's a suitable outfit for a traditional Bhangra dance night?\r",
+            {
+                "entities": [
+                    [
+                        31,
+                        42,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        43,
+                        50,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I'm attending a Gurudwara visit, what should I wear according to Sikh customs?\r",
+            {
+                "entities": [
+                    [
+                        16,
+                        25,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        65,
+                        69,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        70,
+                        77,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What would be an appropriate attire for a traditional North Indian wedding?\r",
+            {
+                "entities": [
+                    [
+                        42,
+                        53,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        67,
+                        74,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What's a stylish outfit for a traditional Dandiya Raas night?\r",
+            {
+                "entities": [
+                    [
+                        30,
+                        41,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        42,
+                        49,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        50,
+                        54,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I'm looking for an ethnic outfit for a traditional Baisakhi celebration, can you provide options?\r",
+            {
+                "entities": [
+                    [
+                        19,
+                        25,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        39,
+                        50,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        51,
+                        59,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I'm attending an Indian wedding as a close relative, what's a suitable attire?\r",
+            {
+                "entities": [
+                    [
+                        24,
+                        31,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Can you suggest a traditional outfit for a religious function like a Jagran?\r",
+            {
+                "entities": [
+                    [
+                        18,
+                        29,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        43,
+                        52,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        69,
+                        75,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I'm going to a Durga Puja celebration, what should I wear?\r",
+            {
+                "entities": [
+                    [
+                        15,
+                        25,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Can you recommend an outfit for a Kathak dance performance?\r",
+            {
+                "entities": [
+                    [
+                        34,
+                        40,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What's a suitable outfit for a traditional Bihu dance celebration?\r",
+            {
+                "entities": [
+                    [
+                        31,
+                        42,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        43,
+                        47,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I'm going to an Indian reception party, what's a fashionable outfit choice?\r",
+            {
+                "entities": [
+                    [
+                        23,
+                        32,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I'm attending a temple visit, what should I wear in keeping with Indian traditions?\r",
+            {
+                "entities": [
+                    [
+                        16,
+                        22,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        72,
+                        82,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What would be an appropriate attire for an Indian Mehendi ceremony?\r",
+            {
+                "entities": [
+                    [
+                        50,
+                        57,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Can you recommend an outfit for a classical Indian dance performance?\r",
+            {
+                "entities": [
+                    [
+                        34,
+                        43,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What's a stylish outfit for a traditional Garba dance night?\r",
+            {
+                "entities": [
+                    [
+                        30,
+                        41,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        42,
+                        47,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I'm looking for an ethnic outfit for a Pongal celebration, can you provide some options?\r",
+            {
+                "entities": [
+                    [
+                        19,
+                        25,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        39,
+                        45,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I'm going to a traditional Indian wedding, what's an appropriate attire for a guest?\r",
+            {
+                "entities": [
+                    [
+                        15,
+                        26,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        34,
+                        41,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Can you suggest a festive outfit for an Indian festival like Holi?\r",
+            {
+                "entities": [
+                    [
+                        61,
+                        65,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I'm attending a Ganesh Chaturthi celebration, what should I wear?\r",
+            {
+                "entities": [
+                    [
+                        16,
+                        32,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I need ideas for a casual yet elegant Indian outfit for a family gathering.\r",
+            {
+                "entities": [
+                    [
+                        19,
+                        25,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What would be a suitable outfit for a South Indian wedding?\r",
+            {
+                "entities": [
+                    [
+                        51,
+                        58,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I'm looking for a traditional outfit for a Karva Chauth event, can you guide me?\r",
+            {
+                "entities": [
+                    [
+                        18,
+                        29,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        43,
+                        55,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I'm looking for business casual attire ideas for a creative workplace.",
+            {
+                "entities": [
+                    [
+                        16,
+                        24,
+                        "FORMAL"
+                    ],
+                    [
+                        25,
+                        31,
+                        "CASUAL"
+                    ],
+                    [
+                        60,
+                        69,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an outfit suitable for a formal event.\r",
+            {
+                "entities": [
+                    [
+                        33,
+                        39,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear to a business meeting?\r",
+            {
+                "entities": [
+                    [
+                        24,
+                        32,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me create a professional attire for an executive occasion.\r",
+            {
+                "entities": [
+                    [
+                        17,
+                        29,
+                        "FORMAL"
+                    ],
+                    [
+                        44,
+                        53,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me outfit ideas for an official ceremony.\r",
+            {
+                "entities": [
+                    [
+                        28,
+                        36,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I want a high-profile outfit for a prestigious event.\r",
+            {
+                "entities": [
+                    [
+                        9,
+                        21,
+                        "FORMAL"
+                    ],
+                    [
+                        35,
+                        46,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest a dress code-appropriate attire for a corporate gathering.\r",
+            {
+                "entities": [
+                    [
+                        46,
+                        55,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What would be a suitable outfit for a high-class gathering?\r",
+            {
+                "entities": [
+                    [
+                        38,
+                        48,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me put together an executive look for a boardroom meeting.\r",
+            {
+                "entities": [
+                    [
+                        24,
+                        33,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me outfit suggestions for a protocol-driven event.\r",
+            {
+                "entities": [
+                    [
+                        33,
+                        48,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I need an outfit that exudes professionalism for a meeting.\r",
+            {
+                "entities": [
+                    [
+                        29,
+                        44,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Create an outfit suitable for a formal corporate setting.\r",
+            {
+                "entities": [
+                    [
+                        39,
+                        48,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear to a business conference?\r",
+            {
+                "entities": [
+                    [
+                        24,
+                        32,
+                        "FORMAL"
+                    ],
+                    [
+                        33,
+                        43,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an outfit that meets the dress code for a professional event.\r",
+            {
+                "entities": [
+                    [
+                        50,
+                        62,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me choose an outfit for a high-profile occasion.\r",
+            {
+                "entities": [
+                    [
+                        31,
+                        43,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me ideas for a formal attire for a prestigious gathering.\r",
+            {
+                "entities": [
+                    [
+                        20,
+                        26,
+                        "FORMAL"
+                    ],
+                    [
+                        40,
+                        51,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I want an official outfit for an executive board meeting.\r",
+            {
+                "entities": [
+                    [
+                        10,
+                        18,
+                        "FORMAL"
+                    ],
+                    [
+                        33,
+                        42,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest a dress code-compliant outfit for a corporate seminar.\r",
+            {
+                "entities": [
+                    [
+                        44,
+                        53,
+                        "FORMAL"
+                    ],
+                    [
+                        54,
+                        61,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What would be an appropriate attire for a protocol-driven ceremony?\r",
+            {
+                "entities": [
+                    [
+                        42,
+                        57,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me create a professional look for a corporate event.\r",
+            {
+                "entities": [
+                    [
+                        17,
+                        29,
+                        "FORMAL"
+                    ],
+                    [
+                        41,
+                        50,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me outfit suggestions for a high-class occasion.\r",
+            {
+                "entities": [
+                    [
+                        33,
+                        43,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I need an outfit suitable for an informal hangout.\r",
+            {
+                "entities": [
+                    [
+                        33,
+                        41,
+                        "CASUAL"
+                    ],
+                    [
+                        42,
+                        49,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear for a casual day out with friends?\r",
+            {
+                "entities": [
+                    [
+                        25,
+                        31,
+                        "CASUAL"
+                    ],
+                    [
+                        32,
+                        39,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest a comfortable outfit for a leisurely gathering.\r",
+            {
+                "entities": [
+                    [
+                        35,
+                        44,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me put together a chill attire for a night out.\r",
+            {
+                "entities": [
+                    [
+                        23,
+                        28,
+                        "CASUAL"
+                    ],
+                    [
+                        42,
+                        51,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me ideas for a relaxed outfit for hanging out with friends.\r",
+            {
+                "entities": [
+                    [
+                        39,
+                        50,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I want a laid-back outfit for a casual get-together.\r",
+            {
+                "entities": [
+                    [
+                        32,
+                        38,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an outfit suitable for an informal night out.\r",
+            {
+                "entities": [
+                    [
+                        34,
+                        42,
+                        "CASUAL"
+                    ],
+                    [
+                        43,
+                        52,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What would be a comfortable attire for a leisurely day?\r",
+            {
+                "entities": [
+                    [
+                        41,
+                        50,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me create a relaxed look for a hangout with friends.\r",
+            {
+                "entities": [
+                    [
+                        36,
+                        43,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me outfit suggestions for a casual day out.\r",
+            {
+                "entities": [
+                    [
+                        33,
+                        39,
+                        "CASUAL"
+                    ],
+                    [
+                        40,
+                        47,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I need an outfit that's perfect for a night of fun.\r",
+            {
+                "entities": [
+                    [
+                        38,
+                        50,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear for a chill evening with friends?\r",
+            {
+                "entities": [
+                    [
+                        25,
+                        30,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an outfit suitable for a formal gathering.\r",
+            {
+                "entities": [
+                    [
+                        33,
+                        39,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear to a business function?\r",
+            {
+                "entities": [
+                    [
+                        24,
+                        32,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me create a professional attire for a corporate event.\r",
+            {
+                "entities": [
+                    [
+                        17,
+                        29,
+                        "FORMAL"
+                    ],
+                    [
+                        43,
+                        52,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me outfit ideas for an official celebration.\r",
+            {
+                "entities": [
+                    [
+                        28,
+                        36,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I want a high-profile outfit for a prestigious party.\r",
+            {
+                "entities": [
+                    [
+                        9,
+                        21,
+                        "FORMAL"
+                    ],
+                    [
+                        35,
+                        46,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Recommend a dress code-appropriate attire for a professional occasion.\r",
+            {
+                "entities": [
+                    [
+                        48,
+                        60,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What would be a fitting outfit for a high-class affair?\r",
+            {
+                "entities": [
+                    [
+                        37,
+                        47,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Assist me in putting together an executive look for a boardroom session.\r",
+            {
+                "entities": [
+                    [
+                        33,
+                        42,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Provide outfit suggestions for a protocol-guided event.\r",
+            {
+                "entities": [
+                    [
+                        33,
+                        48,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I need an outfit that radiates professionalism for a meeting.\r",
+            {
+                "entities": [
+                    [
+                        31,
+                        46,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Create an outfit suitable for a business seminar.\r",
+            {
+                "entities": [
+                    [
+                        32,
+                        40,
+                        "FORMAL"
+                    ],
+                    [
+                        41,
+                        48,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear to a corporate conference?\r",
+            {
+                "entities": [
+                    [
+                        24,
+                        33,
+                        "FORMAL"
+                    ],
+                    [
+                        34,
+                        44,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an ensemble that meets the dress code for a formal gathering.\r",
+            {
+                "entities": [
+                    [
+                        52,
+                        58,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me choose an outfit for a distinguished event.\r",
+            {
+                "entities": []
+            }
+        ],
+        [
+            "Give me ideas for a formal attire for a high-status function.\r",
+            {
+                "entities": [
+                    [
+                        20,
+                        26,
+                        "FORMAL"
+                    ],
+                    [
+                        40,
+                        51,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I want an official outfit for an executive council meeting.\r",
+            {
+                "entities": [
+                    [
+                        10,
+                        18,
+                        "FORMAL"
+                    ],
+                    [
+                        33,
+                        42,
+                        "FORMAL"
+                    ],
+                    [
+                        43,
+                        50,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Recommend a dress code-compliant outfit for a company seminar.\r",
+            {
+                "entities": [
+                    [
+                        54,
+                        61,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What would be an appropriate attire for a protocol-oriented ceremony?\r",
+            {
+                "entities": [
+                    [
+                        42,
+                        59,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Assist me in creating a professional appearance for a corporate assembly.\r",
+            {
+                "entities": [
+                    [
+                        24,
+                        36,
+                        "FORMAL"
+                    ],
+                    [
+                        54,
+                        63,
+                        "FORMAL"
+                    ],
+                    [
+                        64,
+                        72,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Provide outfit suggestions for a high-society occasion.\r",
+            {
+                "entities": [
+                    [
+                        33,
+                        45,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I need an outfit suitable for an informal get-together.\r",
+            {
+                "entities": [
+                    [
+                        33,
+                        41,
+                        "CASUAL"
+                    ],
+                    [
+                        42,
+                        54,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear for a casual hangout with friends?\r",
+            {
+                "entities": [
+                    [
+                        25,
+                        31,
+                        "CASUAL"
+                    ],
+                    [
+                        32,
+                        39,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me put together a relaxed attire for a leisurely outing.\r",
+            {
+                "entities": [
+                    [
+                        44,
+                        53,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me ideas for a laid-back outfit for a night out.\r",
+            {
+                "entities": [
+                    [
+                        43,
+                        52,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I want a comfortable outfit for a casual meetup.\r",
+            {
+                "entities": [
+                    [
+                        34,
+                        40,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an outfit suitable for an informal night gathering.\r",
+            {
+                "entities": [
+                    [
+                        34,
+                        42,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What would be a cozy attire for a leisurely day off?\r",
+            {
+                "entities": [
+                    [
+                        34,
+                        43,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Assist me in creating a chill look for a relaxed evening.\r",
+            {
+                "entities": [
+                    [
+                        24,
+                        29,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Provide outfit suggestions for a laid-back day out.\r",
+            {
+                "entities": [
+                    [
+                        43,
+                        50,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I need an outfit that's perfect for a night of relaxation.\r",
+            {
+                "entities": []
+            }
+        ],
+        [
+            "Recommend clothing for a casual evening with friends.\r",
+            {
+                "entities": [
+                    [
+                        25,
+                        31,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear for a relaxed hangout with pals?\r",
+            {
+                "entities": [
+                    [
+                        33,
+                        40,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me put together an outfit for a low-key event.\r",
+            {
+                "entities": [
+                    [
+                        37,
+                        44,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me ideas for an easygoing attire for a day of fun.\r",
+            {
+                "entities": [
+                    [
+                        21,
+                        30,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I want a comfortable outfit for a casual socializing occasion.\r",
+            {
+                "entities": [
+                    [
+                        34,
+                        40,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest clothing suitable for an informal night on the town.\r",
+            {
+                "entities": [
+                    [
+                        33,
+                        41,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What would be a relaxed ensemble for a leisurely meetup?\r",
+            {
+                "entities": [
+                    [
+                        39,
+                        48,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Assist me in creating a laid-back look for a chill hangout.\r",
+            {
+                "entities": [
+                    [
+                        45,
+                        50,
+                        "CASUAL"
+                    ],
+                    [
+                        51,
+                        58,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Provide outfit suggestions for a stress-free day out.\r",
+            {
+                "entities": [
+                    [
+                        45,
+                        52,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I need an outfit that's perfect for a night of leisure.\r",
+            {
+                "entities": [
+                    [
+                        47,
+                        54,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an outfit appropriate for a formal function.\r",
+            {
+                "entities": [
+                    [
+                        36,
+                        42,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What attire should I choose for a business-related event?\r",
+            {
+                "entities": [
+                    [
+                        34,
+                        50,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me put together a professional outfit for a corporate affair.\r",
+            {
+                "entities": [
+                    [
+                        23,
+                        35,
+                        "FORMAL"
+                    ],
+                    [
+                        49,
+                        58,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Provide outfit ideas for an official ceremony or event.\r",
+            {
+                "entities": [
+                    [
+                        28,
+                        36,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I'm looking for a high-profile ensemble for a prestigious occasion.\r",
+            {
+                "entities": [
+                    [
+                        18,
+                        30,
+                        "FORMAL"
+                    ],
+                    [
+                        46,
+                        57,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Recommend a dress code-compliant attire for a professional gathering.\r",
+            {
+                "entities": [
+                    [
+                        46,
+                        58,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What would be a suitable outfit for an upscale social event?\r",
+            {
+                "entities": []
+            }
+        ],
+        [
+            "Assist me in creating an executive look for a boardroom meeting.\r",
+            {
+                "entities": [
+                    [
+                        25,
+                        34,
+                        "FORMAL"
+                    ],
+                    [
+                        46,
+                        55,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an outfit that aligns with the dress code for a protocol-driven event.\r",
+            {
+                "entities": [
+                    [
+                        56,
+                        71,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I need clothing that conveys professionalism for an important meeting.\r",
+            {
+                "entities": [
+                    [
+                        29,
+                        44,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Create an outfit suitable for a corporate conference or seminar.\r",
+            {
+                "entities": [
+                    [
+                        32,
+                        41,
+                        "FORMAL"
+                    ],
+                    [
+                        42,
+                        52,
+                        "FORMAL"
+                    ],
+                    [
+                        56,
+                        63,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear for a business-related convention?\r",
+            {
+                "entities": [
+                    [
+                        25,
+                        41,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me choose an outfit that adheres to the dress code for a formal occasion.\r",
+            {
+                "entities": [
+                    [
+                        62,
+                        68,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me ideas for a formal attire to wear at an elegant event.\r",
+            {
+                "entities": [
+                    [
+                        20,
+                        26,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I want an official outfit suitable for an executive-level gathering.\r",
+            {
+                "entities": [
+                    [
+                        10,
+                        18,
+                        "FORMAL"
+                    ],
+                    [
+                        42,
+                        57,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Recommend an attire that follows the dress code for a company seminar.\r",
+            {
+                "entities": [
+                    [
+                        62,
+                        69,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What would be an appropriate outfit for a high-profile event?\r",
+            {
+                "entities": [
+                    [
+                        42,
+                        54,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Provide suggestions for an outfit that reflects high-class style.\r",
+            {
+                "entities": [
+                    [
+                        48,
+                        58,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I need clothing suitable for a casual get-together with friends.\r",
+            {
+                "entities": [
+                    [
+                        31,
+                        37,
+                        "CASUAL"
+                    ],
+                    [
+                        38,
+                        50,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear for a laid-back hangout with pals?\r",
+            {
+                "entities": [
+                    [
+                        35,
+                        42,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me put together a relaxed outfit for a leisurely outing.\r",
+            {
+                "entities": [
+                    [
+                        44,
+                        53,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me ideas for an easygoing attire for a night out.\r",
+            {
+                "entities": [
+                    [
+                        44,
+                        53,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I want a comfortable outfit for a casual meet-up.\r",
+            {
+                "entities": [
+                    [
+                        34,
+                        40,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest clothing suitable for an informal night event.\r",
+            {
+                "entities": [
+                    [
+                        33,
+                        41,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What would be a cozy ensemble for a day of relaxation?\r",
+            {
+                "entities": [
+                    [
+                        43,
+                        53,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Assist me in creating a chilled-out look for a relaxed evening.\r",
+            {
+                "entities": [
+                    [
+                        24,
+                        35,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Provide suggestions for an outfit that's perfect for a casual day out.\r",
+            {
+                "entities": [
+                    [
+                        55,
+                        61,
+                        "CASUAL"
+                    ],
+                    [
+                        62,
+                        69,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I need clothing suitable for a night of fun with friends.\r",
+            {
+                "entities": [
+                    [
+                        31,
+                        43,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear for a laid-back evening with buddies?\r",
+            {
+                "entities": [
+                    [
+                        25,
+                        34,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me put together an outfit for a low-key hangout.\r",
+            {
+                "entities": [
+                    [
+                        37,
+                        44,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me ideas for a stress-free attire for a day of leisure.\r",
+            {
+                "entities": [
+                    [
+                        52,
+                        59,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I want a comfortable outfit for a casual social event.\r",
+            {
+                "entities": [
+                    [
+                        34,
+                        40,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest clothing suitable for a relaxed night out.\r",
+            {
+                "entities": [
+                    [
+                        40,
+                        49,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What would be a laid-back ensemble for a leisurely meetup?\r",
+            {
+                "entities": [
+                    [
+                        16,
+                        25,
+                        "CASUAL"
+                    ],
+                    [
+                        41,
+                        50,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Assist me in creating a chill look for an easygoing hangout.\r",
+            {
+                "entities": [
+                    [
+                        24,
+                        29,
+                        "CASUAL"
+                    ],
+                    [
+                        42,
+                        51,
+                        "CASUAL"
+                    ],
+                    [
+                        52,
+                        59,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Provide suggestions for an outfit that's perfect for a day of comfort.\r",
+            {
+                "entities": [
+                    [
+                        55,
+                        69,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I need clothing suitable for a night of relaxation and leisure.\r",
+            {
+                "entities": [
+                    [
+                        31,
+                        50,
+                        "CASUAL"
+                    ],
+                    [
+                        55,
+                        62,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear for an informal evening with friends?\r",
+            {
+                "entities": [
+                    [
+                        26,
+                        34,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me put together a relaxed outfit for a casual meetup.\r",
+            {
+                "entities": [
+                    [
+                        44,
+                        50,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me find an outfit that aligns with the formal dress code.\r",
+            {
+                "entities": [
+                    [
+                        44,
+                        50,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I'm attending a business event – suggest an appropriate attire.\r",
+            {
+                "entities": [
+                    [
+                        16,
+                        24,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Create a professional ensemble for a corporate gathering.\r",
+            {
+                "entities": [
+                    [
+                        9,
+                        21,
+                        "FORMAL"
+                    ],
+                    [
+                        37,
+                        46,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Provide outfit ideas for an official ceremony or protocol event.\r",
+            {
+                "entities": [
+                    [
+                        28,
+                        36,
+                        "FORMAL"
+                    ],
+                    [
+                        49,
+                        57,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I want an elegant outfit for a high-profile occasion.\r",
+            {
+                "entities": [
+                    [
+                        31,
+                        43,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Recommend clothing that suits a formal dress code.\r",
+            {
+                "entities": [
+                    [
+                        32,
+                        38,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me assemble an executive outfit for a boardroom meeting.\r",
+            {
+                "entities": [
+                    [
+                        20,
+                        29,
+                        "FORMAL"
+                    ],
+                    [
+                        43,
+                        52,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear to a prestigious event with a high-class audience?\r",
+            {
+                "entities": [
+                    [
+                        24,
+                        35,
+                        "FORMAL"
+                    ],
+                    [
+                        49,
+                        59,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an attire that reflects professionalism for a corporate conference.\r",
+            {
+                "entities": [
+                    [
+                        32,
+                        47,
+                        "FORMAL"
+                    ],
+                    [
+                        54,
+                        63,
+                        "FORMAL"
+                    ],
+                    [
+                        64,
+                        74,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I need outfit suggestions for a high-profile social gathering.\r",
+            {
+                "entities": [
+                    [
+                        32,
+                        44,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Create an outfit that adheres to the dress code for a formal function.\r",
+            {
+                "entities": [
+                    [
+                        54,
+                        60,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What attire is appropriate for a business seminar?\r",
+            {
+                "entities": [
+                    [
+                        33,
+                        41,
+                        "FORMAL"
+                    ],
+                    [
+                        42,
+                        49,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Assist me in choosing clothing for an official celebration.\r",
+            {
+                "entities": [
+                    [
+                        38,
+                        46,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me ideas for a formal outfit suitable for an executive council meeting.\r",
+            {
+                "entities": [
+                    [
+                        20,
+                        26,
+                        "FORMAL"
+                    ],
+                    [
+                        50,
+                        59,
+                        "FORMAL"
+                    ],
+                    [
+                        60,
+                        67,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I want an official ensemble for a high-status event.\r",
+            {
+                "entities": [
+                    [
+                        10,
+                        18,
+                        "FORMAL"
+                    ],
+                    [
+                        34,
+                        45,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Recommend a dress code-compliant outfit for a protocol-oriented occasion.\r",
+            {
+                "entities": [
+                    [
+                        46,
+                        63,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me put together a professional look for a corporate assembly.\r",
+            {
+                "entities": [
+                    [
+                        23,
+                        35,
+                        "FORMAL"
+                    ],
+                    [
+                        47,
+                        56,
+                        "FORMAL"
+                    ],
+                    [
+                        57,
+                        65,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear for a prestigious gathering?\r",
+            {
+                "entities": [
+                    [
+                        25,
+                        36,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an outfit suitable for a high-society affair.\r",
+            {
+                "entities": [
+                    [
+                        33,
+                        45,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I'm going to an informal gathering – suggest a comfortable outfit.\r",
+            {
+                "entities": [
+                    [
+                        16,
+                        24,
+                        "CASUAL"
+                    ],
+                    [
+                        47,
+                        58,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Create a casual and laid-back attire for a hangout with friends.\r",
+            {
+                "entities": [
+                    [
+                        9,
+                        15,
+                        "CASUAL"
+                    ],
+                    [
+                        20,
+                        29,
+                        "CASUAL"
+                    ],
+                    [
+                        43,
+                        50,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me choose clothing for a leisurely day outdoors.\r",
+            {
+                "entities": [
+                    [
+                        30,
+                        39,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me ideas for an outfit suitable for a chill night out.\r",
+            {
+                "entities": [
+                    [
+                        43,
+                        48,
+                        "CASUAL"
+                    ],
+                    [
+                        49,
+                        58,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I want a relaxed and casual outfit for a social occasion.\r",
+            {
+                "entities": [
+                    [
+                        9,
+                        16,
+                        "CASUAL"
+                    ],
+                    [
+                        21,
+                        27,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest clothing for an informal get-together with friends.\r",
+            {
+                "entities": [
+                    [
+                        24,
+                        32,
+                        "CASUAL"
+                    ],
+                    [
+                        33,
+                        45,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What would be a comfortable outfit for a relaxed day off?\r",
+            {
+                "entities": [
+                    [
+                        16,
+                        27,
+                        "CASUAL"
+                    ],
+                    [
+                        49,
+                        56,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Assist me in creating a casual look for a leisurely evening.\r",
+            {
+                "entities": [
+                    [
+                        24,
+                        30,
+                        "CASUAL"
+                    ],
+                    [
+                        42,
+                        51,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Provide outfit suggestions for a laid-back outing.\r",
+            {
+                "entities": [
+                    [
+                        33,
+                        42,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I need a relaxed outfit that's perfect for a night of fun.\r",
+            {
+                "entities": [
+                    [
+                        45,
+                        57,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear for a casual night out with buddies?\r",
+            {
+                "entities": [
+                    [
+                        25,
+                        31,
+                        "CASUAL"
+                    ],
+                    [
+                        32,
+                        41,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me put together a comfortable attire for a hangout.\r",
+            {
+                "entities": [
+                    [
+                        23,
+                        34,
+                        "CASUAL"
+                    ],
+                    [
+                        48,
+                        55,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me ideas for a stress-free outfit for a day of leisure.\r",
+            {
+                "entities": [
+                    [
+                        20,
+                        31,
+                        "CASUAL"
+                    ],
+                    [
+                        52,
+                        59,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I want a laid-back outfit suitable for a casual social event.\r",
+            {
+                "entities": [
+                    [
+                        9,
+                        18,
+                        "CASUAL"
+                    ],
+                    [
+                        41,
+                        47,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest clothing for an informal night on the town.\r",
+            {
+                "entities": [
+                    [
+                        24,
+                        32,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Assist me in creating a chill look for an easygoing evening.\r",
+            {
+                "entities": [
+                    [
+                        24,
+                        29,
+                        "CASUAL"
+                    ],
+                    [
+                        42,
+                        51,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Provide outfit suggestions for a relaxed day out.\r",
+            {
+                "entities": [
+                    [
+                        33,
+                        40,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I need clothing for a night of relaxation and enjoyment.\r",
+            {
+                "entities": [
+                    [
+                        31,
+                        41,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear for an easygoing evening with friends?\r",
+            {
+                "entities": [
+                    [
+                        26,
+                        35,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me put together a casual outfit for a laid-back meetup.\r",
+            {
+                "entities": [
+                    [
+                        23,
+                        29,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an outfit for Diwali celebration.\r",
+            {
+                "entities": [
+                    [
+                        22,
+                        28,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear for Holi festivities?\r",
+            {
+                "entities": [
+                    [
+                        23,
+                        27,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me create a traditional look for Navratri.\r",
+            {
+                "entities": [
+                    [
+                        17,
+                        28,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        38,
+                        46,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me a stylish outfit idea for Durga Puja.\r",
+            {
+                "entities": [
+                    [
+                        34,
+                        44,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I want a trendy outfit for Ganesh Chaturthi.\r",
+            {
+                "entities": [
+                    [
+                        27,
+                        43,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest a traditional attire for Pongal celebrations.\r",
+            {
+                "entities": [
+                    [
+                        10,
+                        21,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        33,
+                        39,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What's a perfect outfit for Onam festivities?\r",
+            {
+                "entities": [
+                    [
+                        28,
+                        32,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me put together a chic look for Baisakhi.\r",
+            {
+                "entities": [
+                    [
+                        37,
+                        45,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me fashion tips for Karva Chauth attire.\r",
+            {
+                "entities": [
+                    [
+                        25,
+                        37,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I need a unique outfit idea for Raksha Bandhan.\r",
+            {
+                "entities": [
+                    [
+                        32,
+                        46,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an outfit that's perfect for Janmashtami.\r",
+            {
+                "entities": [
+                    [
+                        37,
+                        48,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear on Makar Sankranti?\r",
+            {
+                "entities": [
+                    [
+                        22,
+                        37,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me create a stylish look for Lohri celebrations.\r",
+            {
+                "entities": [
+                    [
+                        34,
+                        39,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me an elegant outfit idea for Eid festivities.\r",
+            {
+                "entities": [
+                    [
+                        35,
+                        38,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I want to look fashionable on Christmas. Suggestions?\r",
+            {
+                "entities": [
+                    [
+                        30,
+                        40,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest a traditional outfit for Dussehra.\r",
+            {
+                "entities": [
+                    [
+                        10,
+                        21,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        33,
+                        41,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What's a suitable attire for Ramadan celebrations?\r",
+            {
+                "entities": [
+                    [
+                        29,
+                        36,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me find the right outfit for Vaisakha festival.\r",
+            {
+                "entities": [
+                    [
+                        34,
+                        51,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me fashion advice for Chhath Puja attire.\r",
+            {
+                "entities": [
+                    [
+                        27,
+                        38,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I need a stylish outfit idea for Bihu celebrations.\r",
+            {
+                "entities": [
+                    [
+                        33,
+                        37,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an outfit that's perfect for Maha Shivaratri.\r",
+            {
+                "entities": [
+                    [
+                        37,
+                        52,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear for Guru Purnima ceremonies?\r",
+            {
+                "entities": [
+                    [
+                        23,
+                        35,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me create a trendy look for Nag Panchami.\r",
+            {
+                "entities": [
+                    [
+                        33,
+                        45,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me a traditional outfit idea for Teej festival.\r",
+            {
+                "entities": [
+                    [
+                        10,
+                        21,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        38,
+                        51,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I want a fashionable outfit for Gudi Padwa celebrations.\r",
+            {
+                "entities": [
+                    [
+                        32,
+                        42,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an outfit that's appropriate for Ugadi.\r",
+            {
+                "entities": [
+                    [
+                        41,
+                        46,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What's the best attire for Vishu festivities?\r",
+            {
+                "entities": [
+                    [
+                        27,
+                        44,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me find the right outfit for Varalakshmi Vrat.\r",
+            {
+                "entities": [
+                    [
+                        34,
+                        50,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me fashion tips for Karthigai Deepam attire.\r",
+            {
+                "entities": [
+                    [
+                        25,
+                        41,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I need a unique outfit idea for Govardhan Puja.\r",
+            {
+                "entities": [
+                    [
+                        32,
+                        46,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest a traditional outfit for Thai Pongal.\r",
+            {
+                "entities": [
+                    [
+                        10,
+                        21,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        33,
+                        44,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear for the Kumbh Mela event?\r",
+            {
+                "entities": [
+                    [
+                        27,
+                        37,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me create a chic look for Jagannath Rath Yatra.\r",
+            {
+                "entities": [
+                    [
+                        31,
+                        51,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me an outfit suggestion for the Tulsi Vivah ceremony.\r",
+            {
+                "entities": [
+                    [
+                        37,
+                        48,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I want a stylish outfit for Karadaiyan Nombu.\r",
+            {
+                "entities": [
+                    [
+                        28,
+                        44,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an outfit that's perfect for Samhain celebrations.\r",
+            {
+                "entities": [
+                    [
+                        37,
+                        57,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear for the Puthandu festival?\r",
+            {
+                "entities": [
+                    [
+                        27,
+                        44,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me find the right attire for Kali Puja.\r",
+            {
+                "entities": [
+                    [
+                        34,
+                        43,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me a trendy outfit idea for Vasant Panchami.\r",
+            {
+                "entities": [
+                    [
+                        33,
+                        48,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I need a fashionable outfit for Chaitra Navratri.\r",
+            {
+                "entities": [
+                    [
+                        32,
+                        48,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an outfit that's suitable for Mahavir Jayanti.\r",
+            {
+                "entities": [
+                    [
+                        38,
+                        53,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear for Ram Navami celebrations?\r",
+            {
+                "entities": [
+                    [
+                        23,
+                        33,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me create a traditional look for Hanuman Jayanti.\r",
+            {
+                "entities": [
+                    [
+                        17,
+                        28,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        38,
+                        53,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me fashion tips for Chaitra Sukladi attire.\r",
+            {
+                "entities": [
+                    [
+                        25,
+                        40,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I want a unique outfit idea for the Hemis Festival.\r",
+            {
+                "entities": [
+                    [
+                        36,
+                        50,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an outfit that's perfect for the Losar Festival.\r",
+            {
+                "entities": [
+                    [
+                        41,
+                        55,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear for the Saga Dawa celebration?\r",
+            {
+                "entities": [
+                    [
+                        27,
+                        48,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me find the right attire for the Yuru Kabgyat Festival.\r",
+            {
+                "entities": [
+                    [
+                        38,
+                        59,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me a stylish outfit idea for the Phyang Tsedup Festival.\r",
+            {
+                "entities": [
+                    [
+                        38,
+                        51,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I need a fashionable outfit for the Pushkar Mela.\r",
+            {
+                "entities": [
+                    [
+                        36,
+                        48,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an outfit that stands out at the Sankat Mochan Music Festival.\r",
+            {
+                "entities": [
+                    [
+                        41,
+                        69,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What's a trendy attire for the Konark Dance Festival?\r",
+            {
+                "entities": [
+                    [
+                        31,
+                        52,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me create a traditional look for the International Mango Festival.\r",
+            {
+                "entities": [
+                    [
+                        17,
+                        28,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        42,
+                        70,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me a chic outfit idea for the Tansen Music Festival.\r",
+            {
+                "entities": [
+                    [
+                        35,
+                        56,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I want an elegant outfit for the Modhera Dance Festival.\r",
+            {
+                "entities": [
+                    [
+                        33,
+                        55,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an outfit that's perfect for the Chariot Festival.\r",
+            {
+                "entities": [
+                    [
+                        41,
+                        57,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear for the Arattupuzha Pooram?\r",
+            {
+                "entities": [
+                    [
+                        27,
+                        45,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me find the right attire for the Attukal Pongala.\r",
+            {
+                "entities": [
+                    [
+                        38,
+                        53,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me fashion tips for the Thrissur Pooram.\r",
+            {
+                "entities": [
+                    [
+                        29,
+                        44,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I need a unique outfit idea for the Theyyam Festival.\r",
+            {
+                "entities": [
+                    [
+                        36,
+                        52,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an outfit that's suitable for Ganga Dussehra.\r",
+            {
+                "entities": [
+                    [
+                        38,
+                        52,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear for the Rathyatra celebration?\r",
+            {
+                "entities": [
+                    [
+                        27,
+                        36,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me create a stylish look for Buddha Purnima.\r",
+            {
+                "entities": [
+                    [
+                        34,
+                        48,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me a fashionable outfit idea for Eid.\r",
+            {
+                "entities": [
+                    [
+                        38,
+                        41,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an outfit that's perfect for the Kumbh Mela.\r",
+            {
+                "entities": [
+                    [
+                        41,
+                        51,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear for the Jagannath Rath Yatra?\r",
+            {
+                "entities": [
+                    [
+                        27,
+                        47,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me find the right attire for the Tulsi Vivah ceremony.\r",
+            {
+                "entities": [
+                    [
+                        38,
+                        49,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me fashion tips for the Karadaiyan Nombu celebration.\r",
+            {
+                "entities": [
+                    [
+                        29,
+                        45,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I want a unique outfit idea for Samhain festivities.\r",
+            {
+                "entities": [
+                    [
+                        32,
+                        39,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an outfit that's suitable for the Puthandu festival.\r",
+            {
+                "entities": [
+                    [
+                        42,
+                        50,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear for the Kali Puja event?\r",
+            {
+                "entities": [
+                    [
+                        27,
+                        36,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me create a stylish look for Vasant Panchami.\r",
+            {
+                "entities": [
+                    [
+                        34,
+                        49,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me a chic outfit idea for Chaitra Navratri.\r",
+            {
+                "entities": [
+                    [
+                        31,
+                        47,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I need a fashionable outfit for Mahavir Jayanti.\r",
+            {
+                "entities": [
+                    [
+                        32,
+                        47,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an outfit that stands out at Ram Navami.\r",
+            {
+                "entities": [
+                    [
+                        37,
+                        47,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear for Hanuman Jayanti?\r",
+            {
+                "entities": [
+                    [
+                        23,
+                        38,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me find the right attire for Chaitra Sukladi.\r",
+            {
+                "entities": [
+                    [
+                        34,
+                        49,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me a trendy outfit idea for the Hemis Festival.\r",
+            {
+                "entities": [
+                    [
+                        37,
+                        51,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I want an elegant outfit for the Losar Festival.\r",
+            {
+                "entities": [
+                    [
+                        33,
+                        47,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an outfit that's perfect for the Saga Dawa celebration.\r",
+            {
+                "entities": [
+                    [
+                        41,
+                        50,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear for the Yuru Kabgyat Festival?\r",
+            {
+                "entities": [
+                    [
+                        27,
+                        39,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me create a traditional look for the Phyang Tsedup Festival.\r",
+            {
+                "entities": [
+                    [
+                        17,
+                        28,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        42,
+                        55,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me a fashionable outfit idea for the Pushkar Mela.\r",
+            {
+                "entities": [
+                    [
+                        42,
+                        54,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I need a unique outfit idea for the Sankat Mochan Music Festival.\r",
+            {
+                "entities": [
+                    [
+                        36,
+                        64,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an outfit that's suitable for the Konark Dance Festival.\r",
+            {
+                "entities": [
+                    [
+                        42,
+                        63,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear for the International Mango Festival?\r",
+            {
+                "entities": [
+                    [
+                        27,
+                        55,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me find the right attire for the Tansen Music Festival.\r",
+            {
+                "entities": [
+                    [
+                        38,
+                        59,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me fashion tips for the Modhera Dance Festival.\r",
+            {
+                "entities": [
+                    [
+                        29,
+                        51,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I want a stylish outfit for the Chariot Festival.\r",
+            {
+                "entities": [
+                    [
+                        32,
+                        48,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an outfit that's perfect for the Arattupuzha Pooram.\r",
+            {
+                "entities": [
+                    [
+                        41,
+                        59,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear for the Attukal Pongala?\r",
+            {
+                "entities": [
+                    [
+                        27,
+                        42,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me create a chic look for the Thrissur Pooram.\r",
+            {
+                "entities": [
+                    [
+                        35,
+                        50,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me a fashionable outfit idea for the Theyyam Festival.\r",
+            {
+                "entities": [
+                    [
+                        42,
+                        58,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I need an elegant outfit for Ganga Dussehra.\r",
+            {
+                "entities": [
+                    [
+                        29,
+                        43,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an outfit that's suitable for the Rathyatra celebration.\r",
+            {
+                "entities": [
+                    [
+                        42,
+                        51,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear for Buddha Purnima?\r",
+            {
+                "entities": [
+                    [
+                        23,
+                        37,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me find the right attire for Diwali.\r",
+            {
+                "entities": [
+                    [
+                        34,
+                        40,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me fashion tips for Holi festivities.\r",
+            {
+                "entities": [
+                    [
+                        25,
+                        29,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I want a unique outfit idea for Navratri celebrations.\r",
+            {
+                "entities": [
+                    [
+                        32,
+                        40,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an outfit that's perfect for Durga Puja.\r",
+            {
+                "entities": [
+                    [
+                        37,
+                        47,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear for Ganesh Chaturthi?\r",
+            {
+                "entities": [
+                    [
+                        23,
+                        39,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me create a stylish look for Pongal.\r",
+            {
+                "entities": [
+                    [
+                        34,
+                        40,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me a chic outfit idea for Onam.\r",
+            {
+                "entities": [
+                    [
+                        31,
+                        35,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I need a fashionable outfit for Baisakhi.\r",
+            {
+                "entities": [
+                    [
+                        32,
+                        40,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an outfit that's suitable for Karva Chauth.\r",
+            {
+                "entities": [
+                    [
+                        38,
+                        50,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear for Raksha Bandhan?\r",
+            {
+                "entities": [
+                    [
+                        23,
+                        37,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me find the right attire for Janmashtami.\r",
+            {
+                "entities": [
+                    [
+                        34,
+                        45,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me a trendy outfit idea for Makar Sankranti.\r",
+            {
+                "entities": [
+                    [
+                        33,
+                        48,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I want a stylish outfit for Lohri.\r",
+            {
+                "entities": [
+                    [
+                        28,
+                        33,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an outfit that's perfect for Eid celebrations.\r",
+            {
+                "entities": [
+                    [
+                        37,
+                        53,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear for Christmas festivities?\r",
+            {
+                "entities": [
+                    [
+                        23,
+                        32,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me create a traditional look for Dussehra.\r",
+            {
+                "entities": [
+                    [
+                        17,
+                        28,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        38,
+                        46,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me fashion tips for Ramadan attire.\r",
+            {
+                "entities": [
+                    [
+                        25,
+                        32,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I need a unique outfit idea for Vaisakha.\r",
+            {
+                "entities": [
+                    [
+                        32,
+                        40,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an outfit that's suitable for Chhath Puja.\r",
+            {
+                "entities": [
+                    [
+                        38,
+                        49,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear for Bihu celebrations?\r",
+            {
+                "entities": [
+                    [
+                        23,
+                        27,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me find the right attire for Maha Shivaratri.\r",
+            {
+                "entities": [
+                    [
+                        34,
+                        49,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me a fashionable outfit idea for Guru Purnima.\r",
+            {
+                "entities": [
+                    [
+                        38,
+                        50,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I want a chic outfit for Nag Panchami.\r",
+            {
+                "entities": [
+                    [
+                        25,
+                        37,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an outfit that's perfect for Teej.\r",
+            {
+                "entities": [
+                    [
+                        37,
+                        41,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear for the Govardhan Puja celebration?\r",
+            {
+                "entities": [
+                    [
+                        27,
+                        41,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me create a stylish look for Thai Pongal.\r",
+            {
+                "entities": [
+                    [
+                        34,
+                        45,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me a unique outfit idea for the Kumbh Mela.\r",
+            {
+                "entities": [
+                    [
+                        37,
+                        47,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an outfit that's perfect for the Jagannath Rath Yatra.\r",
+            {
+                "entities": [
+                    [
+                        41,
+                        61,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear for the Tulsi Vivah ceremony?\r",
+            {
+                "entities": [
+                    [
+                        27,
+                        38,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me find the right attire for the Karadaiyan Nombu festival.\r",
+            {
+                "entities": [
+                    [
+                        38,
+                        63,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me fashion tips for a festive Samhain outfit.\r",
+            {
+                "entities": [
+                    [
+                        35,
+                        42,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I need an elegant outfit idea for the Puthandu celebration.\r",
+            {
+                "entities": [
+                    [
+                        38,
+                        46,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an outfit that's suitable for the Kali Puja event.\r",
+            {
+                "entities": [
+                    [
+                        42,
+                        51,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear for Vasant Panchami?\r",
+            {
+                "entities": [
+                    [
+                        23,
+                        38,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me create a trendy look for Chaitra Navratri.\r",
+            {
+                "entities": [
+                    [
+                        33,
+                        49,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me a chic outfit idea for Mahavir Jayanti.\r",
+            {
+                "entities": [
+                    [
+                        31,
+                        46,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I want a fashionable outfit for Ram Navami.\r",
+            {
+                "entities": [
+                    [
+                        32,
+                        42,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an outfit that's perfect for Hanuman Jayanti.\r",
+            {
+                "entities": [
+                    [
+                        37,
+                        52,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear for Chaitra Sukladi celebrations?\r",
+            {
+                "entities": [
+                    [
+                        23,
+                        38,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me find the right attire for the Hemis Festival.\r",
+            {
+                "entities": [
+                    [
+                        38,
+                        52,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me a unique outfit idea for the Losar Festival.\r",
+            {
+                "entities": [
+                    [
+                        37,
+                        42,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I need a stylish outfit for the Saga Dawa celebration.\r",
+            {
+                "entities": [
+                    [
+                        32,
+                        41,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an outfit that's suitable for the Yuru Kabgyat Festival.\r",
+            {
+                "entities": [
+                    [
+                        42,
+                        54,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear for the Phyang Tsedup Festival?\r",
+            {
+                "entities": [
+                    [
+                        27,
+                        40,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me create a traditional look for the Pushkar Mela.\r",
+            {
+                "entities": [
+                    [
+                        17,
+                        28,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        42,
+                        54,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me fashion tips for a standout outfit at Sankat Mochan Music Festival.\r",
+            {
+                "entities": [
+                    [
+                        46,
+                        74,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I want a trendy outfit idea for the Konark Dance Festival.\r",
+            {
+                "entities": [
+                    [
+                        36,
+                        57,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an outfit that's perfect for the International Mango Festival.\r",
+            {
+                "entities": [
+                    [
+                        41,
+                        69,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear for the Tansen Music Festival?\r",
+            {
+                "entities": [
+                    [
+                        27,
+                        48,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me find the right attire for the Modhera Dance Festival.\r",
+            {
+                "entities": [
+                    [
+                        38,
+                        60,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me a chic outfit idea for the Chariot Festival.\r",
+            {
+                "entities": [
+                    [
+                        35,
+                        51,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I need a fashionable outfit for the Arattupuzha Pooram.\r",
+            {
+                "entities": [
+                    [
+                        36,
+                        54,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an outfit that's suitable for the Attukal Pongala.\r",
+            {
+                "entities": [
+                    [
+                        42,
+                        57,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear for the vibrant Thrissur Pooram?\r",
+            {
+                "entities": [
+                    [
+                        35,
+                        50,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me create a traditional look for the Theyyam Festival.\r",
+            {
+                "entities": [
+                    [
+                        17,
+                        28,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        42,
+                        49,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me a unique outfit idea for Ganga Dussehra.\r",
+            {
+                "entities": [
+                    [
+                        33,
+                        47,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I want a stylish outfit for the Rathyatra celebration.\r",
+            {
+                "entities": [
+                    [
+                        32,
+                        41,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an outfit that's perfect for Buddha Purnima.\r",
+            {
+                "entities": [
+                    [
+                        37,
+                        51,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear for the Diwali festival?\r",
+            {
+                "entities": [
+                    [
+                        27,
+                        33,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me find the right attire for Holi festivities.\r",
+            {
+                "entities": [
+                    [
+                        34,
+                        38,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me fashion tips for a traditional Navratri look.\r",
+            {
+                "entities": [
+                    [
+                        27,
+                        38,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        39,
+                        47,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I need a trendy outfit idea for Durga Puja.\r",
+            {
+                "entities": [
+                    [
+                        32,
+                        42,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an outfit that's suitable for Ganesh Chaturthi.\r",
+            {
+                "entities": [
+                    [
+                        38,
+                        54,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear for the colorful Pongal celebration?\r",
+            {
+                "entities": [
+                    [
+                        36,
+                        42,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me create a stylish look for Onam festivities.\r",
+            {
+                "entities": [
+                    [
+                        34,
+                        38,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me a chic outfit idea for Baisakhi.\r",
+            {
+                "entities": [
+                    [
+                        31,
+                        39,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I want a fashionable outfit for Karva Chauth.\r",
+            {
+                "entities": [
+                    [
+                        32,
+                        44,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an outfit that's perfect for Raksha Bandhan.\r",
+            {
+                "entities": [
+                    [
+                        37,
+                        51,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear for Janmashtami celebrations?\r",
+            {
+                "entities": [
+                    [
+                        23,
+                        34,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me find the right attire for Makar Sankranti.\r",
+            {
+                "entities": [
+                    [
+                        34,
+                        49,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me a unique outfit idea for Lohri.\r",
+            {
+                "entities": [
+                    [
+                        33,
+                        38,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I need a stylish outfit for Eid festivities.\r",
+            {
+                "entities": [
+                    [
+                        28,
+                        31,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an outfit that's suitable for Christmas celebrations.\r",
+            {
+                "entities": [
+                    [
+                        38,
+                        47,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear for the grand Dussehra festival?\r",
+            {
+                "entities": [
+                    [
+                        33,
+                        41,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me create a traditional look for Ramadan.\r",
+            {
+                "entities": [
+                    [
+                        17,
+                        28,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        38,
+                        45,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me fashion tips for a festive Vaisakha attire.\r",
+            {
+                "entities": [
+                    [
+                        35,
+                        43,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I want a chic outfit idea for Chhath Puja.\r",
+            {
+                "entities": [
+                    [
+                        30,
+                        41,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an outfit that's perfect for the joyful Bihu festival.\r",
+            {
+                "entities": [
+                    [
+                        48,
+                        52,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear for Maha Shivaratri?\r",
+            {
+                "entities": [
+                    [
+                        28,
+                        38,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me find the right attire for Guru Purnima.\r",
+            {
+                "entities": [
+                    [
+                        34,
+                        46,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me a trendy outfit idea for Nag Panchami.\r",
+            {
+                "entities": [
+                    [
+                        33,
+                        45,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I need a fashionable outfit for Teej celebrations.\r",
+            {
+                "entities": [
+                    [
+                        32,
+                        36,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an outfit that's suitable for Gudi Padwa.\r",
+            {
+                "entities": [
+                    [
+                        38,
+                        48,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear for the Ugadi festival?\r",
+            {
+                "entities": [
+                    [
+                        27,
+                        32,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an outfit for a traditional event celebrating our cultural heritage.\r",
+            {
+                "entities": [
+                    [
+                        24,
+                        35,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear to a festive gathering that involves ritualistic practices?\r",
+            {
+                "entities": [
+                    [
+                        56,
+                        67,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me create a folk-inspired outfit for a cultural festivity.\r",
+            {
+                "entities": [
+                    [
+                        17,
+                        30,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        44,
+                        52,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me a traditional attire idea that reflects my ethnic background.\r",
+            {
+                "entities": [
+                    [
+                        10,
+                        21,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        51,
+                        57,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I want a heritage-inspired outfit suitable for a religious ritual.\r",
+            {
+                "entities": [
+                    [
+                        49,
+                        58,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest clothing that honors ancestral customs for a special event.\r",
+            {
+                "entities": [
+                    [
+                        29,
+                        38,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear to a traditional festivity rooted in ancient rituals?\r",
+            {
+                "entities": [
+                    [
+                        24,
+                        35,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        56,
+                        63,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        64,
+                        71,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me design an ethnic outfit that pays homage to our ritualistic traditions.\r",
+            {
+                "entities": [
+                    [
+                        18,
+                        24,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        56,
+                        67,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me a fashion idea that captures the essence of our cultural heritage.\r",
+            {
+                "entities": [
+                    [
+                        56,
+                        64,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I want an outfit suggestion that blends modern style with traditional rituals.\r",
+            {
+                "entities": [
+                    [
+                        58,
+                        69,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        70,
+                        77,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest clothing that respects our cultural customs and traditions.\r",
+            {
+                "entities": [
+                    [
+                        35,
+                        43,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        56,
+                        66,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What attire should I choose for a ritualistic celebration of our heritage?\r",
+            {
+                "entities": [
+                    [
+                        34,
+                        45,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me create a festive outfit inspired by our ancestral rituals.\r",
+            {
+                "entities": [
+                    [
+                        48,
+                        57,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        58,
+                        65,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me an outfit idea that is both traditional and ritualistic.\r",
+            {
+                "entities": [
+                    [
+                        36,
+                        47,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        52,
+                        63,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I want to wear something ethnic yet contemporary for a cultural festivity.\r",
+            {
+                "entities": [
+                    [
+                        25,
+                        31,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        55,
+                        63,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an outfit that embodies the essence of our folk traditions.\r",
+            {
+                "entities": [
+                    [
+                        51,
+                        55,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        56,
+                        66,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear to a festive event that holds religious significance?\r",
+            {
+                "entities": [
+                    [
+                        49,
+                        58,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me design a ritualistic outfit that showcases our cultural roots.\r",
+            {
+                "entities": [
+                    [
+                        17,
+                        28,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        55,
+                        63,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me a fashion suggestion that symbolizes ancient rituals.\r",
+            {
+                "entities": [
+                    [
+                        45,
+                        52,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        53,
+                        60,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I want to dress in attire that honors our customs and heritage.\r",
+            {
+                "entities": [
+                    [
+                        54,
+                        62,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an outfit for a traditional and cultural celebration.\r",
+            {
+                "entities": [
+                    [
+                        24,
+                        35,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        40,
+                        48,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear to a festive occasion that involves ritualistic practices?\r",
+            {
+                "entities": [
+                    [
+                        55,
+                        66,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me create a folk-inspired ensemble for a cultural festivity.\r",
+            {
+                "entities": [
+                    [
+                        17,
+                        30,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        46,
+                        54,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I want a heritage-inspired outfit suitable for a religious ceremony.\r",
+            {
+                "entities": [
+                    [
+                        9,
+                        26,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        49,
+                        58,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What attire would be fitting for a traditional festivity rooted in ancient rituals?\r",
+            {
+                "entities": [
+                    [
+                        35,
+                        46,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        67,
+                        74,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        75,
+                        82,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me design an ethnic costume that pays homage to our ritualistic traditions.\r",
+            {
+                "entities": [
+                    [
+                        18,
+                        24,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        57,
+                        68,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        69,
+                        79,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Provide a fashion idea that captures the essence of our cultural heritage.\r",
+            {
+                "entities": [
+                    [
+                        56,
+                        64,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        65,
+                        73,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I'm looking for an outfit suggestion that blends modern style with traditional rituals.\r",
+            {
+                "entities": [
+                    [
+                        67,
+                        78,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        79,
+                        86,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Recommend clothing that respects our cultural customs and traditions.\r",
+            {
+                "entities": [
+                    [
+                        37,
+                        45,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        58,
+                        68,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What clothing should I choose for a ritualistic celebration of our heritage?\r",
+            {
+                "entities": [
+                    [
+                        36,
+                        47,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        67,
+                        75,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Assist me in creating a festive outfit inspired by our ancestral rituals.\r",
+            {
+                "entities": [
+                    [
+                        55,
+                        64,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        65,
+                        72,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Share an outfit idea that is both traditional and ritualistic in nature.\r",
+            {
+                "entities": [
+                    [
+                        34,
+                        45,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        50,
+                        61,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I'd like to wear something ethnic yet contemporary for a cultural festivity.\r",
+            {
+                "entities": [
+                    [
+                        27,
+                        33,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        57,
+                        65,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an attire that embodies the essence of our folk traditions.\r",
+            {
+                "entities": [
+                    [
+                        51,
+                        55,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What would be appropriate to wear to a festive event that holds religious significance?\r",
+            {
+                "entities": [
+                    [
+                        64,
+                        73,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me design a ritualistic costume that showcases our cultural roots.\r",
+            {
+                "entities": [
+                    [
+                        17,
+                        28,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        56,
+                        64,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Offer a fashion suggestion that symbolizes ancient rituals.\r",
+            {
+                "entities": [
+                    [
+                        43,
+                        50,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        51,
+                        58,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I need to dress in attire that truly honors our customs and heritage.\r",
+            {
+                "entities": [
+                    [
+                        60,
+                        68,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Advise me on an outfit for a cultural gathering steeped in tradition.\r",
+            {
+                "entities": [
+                    [
+                        29,
+                        37,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        59,
+                        68,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What clothing choice would be suitable for a festive celebration with ritualistic elements?\r",
+            {
+                "entities": [
+                    [
+                        70,
+                        81,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Support me in creating a folk-inspired look for an important cultural festivity.\r",
+            {
+                "entities": [
+                    [
+                        25,
+                        38,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        61,
+                        69,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Provide me with an idea for traditional clothing that represents my ethnic background.\r",
+            {
+                "entities": [
+                    [
+                        28,
+                        39,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        68,
+                        74,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an attire that draws from our heritage and is fitting for a religious ceremony.\r",
+            {
+                "entities": [
+                    [
+                        38,
+                        46,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        68,
+                        77,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Assist me in crafting an outfit that pays homage to ancestral customs for this occasion.\r",
+            {
+                "entities": [
+                    [
+                        52,
+                        61,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me choose clothing for a traditional festivity rooted in ancient rituals.\r",
+            {
+                "entities": [
+                    [
+                        30,
+                        41,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        62,
+                        69,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        70,
+                        77,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Offer guidance in designing an ethnic ensemble that captures our ritualistic traditions.\r",
+            {
+                "entities": [
+                    [
+                        31,
+                        37,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        65,
+                        76,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        77,
+                        87,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Propose a fashion concept that beautifully captures the essence of our cultural heritage.\r",
+            {
+                "entities": [
+                    [
+                        71,
+                        79,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        80,
+                        88,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Combine modern style with traditional rituals in an outfit suggestion for me.\r",
+            {
+                "entities": [
+                    [
+                        26,
+                        37,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Recommend clothing that upholds and respects our cultural customs and traditions.\r",
+            {
+                "entities": [
+                    [
+                        70,
+                        80,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What outfit aligns best with a ritualistic celebration of our heritage?\r",
+            {
+                "entities": [
+                    [
+                        31,
+                        42,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        62,
+                        70,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Work with me to create a festive outfit inspired by the rituals of our ancestors.\r",
+            {
+                "entities": [
+                    [
+                        56,
+                        63,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an outfit idea that seamlessly blends tradition and ritualistic elements.\r",
+            {
+                "entities": [
+                    [
+                        46,
+                        55,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        60,
+                        71,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Provide suggestions for an ethnic, contemporary outfit for a cultural festivity.\r",
+            {
+                "entities": [
+                    [
+                        27,
+                        33,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        61,
+                        69,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Design an attire that showcases the heart of our folk traditions for this event.\r",
+            {
+                "entities": [
+                    [
+                        49,
+                        53,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "How should I dress for a festive gathering with religious significance?\r",
+            {
+                "entities": [
+                    [
+                        48,
+                        57,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Craft a ritualistic costume that reflects and honors our cultural roots.\r",
+            {
+                "entities": [
+                    [
+                        8,
+                        19,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        57,
+                        65,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Devise a fashion recommendation that embodies the spirit of ancient rituals.\r",
+            {
+                "entities": [
+                    [
+                        60,
+                        67,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        68,
+                        75,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Share outfit ideas that resonate with the deep ritualistic significance of the occasion.\r",
+            {
+                "entities": [
+                    [
+                        47,
+                        58,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an outfit suitable for a traditional and cultural event.\r",
+            {
+                "entities": [
+                    [
+                        33,
+                        44,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        49,
+                        57,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What attire would be appropriate for a festive occasion involving ritualistic elements?\r",
+            {
+                "entities": [
+                    [
+                        66,
+                        77,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Assist me in putting together a folk-inspired ensemble for a cultural festivity.\r",
+            {
+                "entities": [
+                    [
+                        32,
+                        45,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        61,
+                        69,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Provide an idea for traditional clothing that showcases my ethnic heritage.\r",
+            {
+                "entities": [
+                    [
+                        20,
+                        31,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        59,
+                        65,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        66,
+                        74,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I'm seeking a heritage-infused outfit perfect for a religious ritual.\r",
+            {
+                "entities": [
+                    [
+                        14,
+                        30,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        52,
+                        61,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        62,
+                        68,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest clothing that pays tribute to ancestral customs at this special event.\r",
+            {
+                "entities": [
+                    [
+                        38,
+                        47,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What outfit would align with a traditional festivity rooted in ancient rituals?\r",
+            {
+                "entities": [
+                    [
+                        31,
+                        42,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        63,
+                        70,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        71,
+                        78,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me design an ethnic ensemble that reveres our ritualistic traditions.\r",
+            {
+                "entities": [
+                    [
+                        18,
+                        24,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        51,
+                        62,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        63,
+                        73,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Offer a fashion concept that captures the very essence of our cultural heritage.\r",
+            {
+                "entities": [
+                    [
+                        62,
+                        70,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        71,
+                        79,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Merge contemporary style with traditional rituals in an outfit recommendation.\r",
+            {
+                "entities": [
+                    [
+                        30,
+                        41,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        42,
+                        49,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Recommend clothing that pays homage to and upholds our cultural customs.\r",
+            {
+                "entities": [
+                    [
+                        55,
+                        63,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear to embody the spirit of a ritualistic celebration of our heritage?\r",
+            {
+                "entities": [
+                    [
+                        45,
+                        56,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        76,
+                        84,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Work with me to create a festive outfit drawing inspiration from our ancestral rituals.\r",
+            {
+                "entities": [
+                    [
+                        69,
+                        78,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        79,
+                        86,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Share an outfit idea seamlessly blending tradition and ritualistic elements.\r",
+            {
+                "entities": [
+                    [
+                        55,
+                        66,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Propose an ethnic yet modern attire for this cultural festivity.\r",
+            {
+                "entities": [
+                    [
+                        11,
+                        17,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        45,
+                        53,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Design an outfit that embodies the heart and soul of our folk traditions.\r",
+            {
+                "entities": [
+                    [
+                        57,
+                        61,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "How best can I dress for a joyous gathering with religious undertones?\r",
+            {
+                "entities": [
+                    [
+                        49,
+                        58,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Craft a ritualistic costume that deeply resonates with our cultural roots.\r",
+            {
+                "entities": [
+                    [
+                        8,
+                        19,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        59,
+                        67,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Provide a fashion recommendation that symbolizes the reverence of ancient rituals.\r",
+            {
+                "entities": [
+                    [
+                        66,
+                        73,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        74,
+                        81,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Share outfit ideas mirroring the profound ritualistic nature of this occasion.\r",
+            {
+                "entities": [
+                    [
+                        42,
+                        53,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me curate an outfit for a traditional event celebrating our cultural heritage.\r",
+            {
+                "entities": [
+                    [
+                        31,
+                        42,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        65,
+                        73,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What would be the ideal attire for a festive gathering with ritualistic components?\r",
+            {
+                "entities": [
+                    [
+                        60,
+                        71,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest a folk-inspired ensemble to exude authenticity at this cultural festivity.\r",
+            {
+                "entities": [
+                    [
+                        10,
+                        23,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        63,
+                        71,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Propose an idea for traditional clothing that reverberates with my ethnic background.\r",
+            {
+                "entities": [
+                    [
+                        20,
+                        31,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        67,
+                        73,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I'm aiming for a heritage-rich outfit that befits a religious ritual.\r",
+            {
+                "entities": [
+                    [
+                        17,
+                        30,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        52,
+                        61,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        62,
+                        68,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Offer clothing choices that embrace and honor ancestral customs for this event.\r",
+            {
+                "entities": [
+                    [
+                        46,
+                        55,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What outfit captures the essence of a traditional festivity steeped in ancient rituals?\r",
+            {
+                "entities": [
+                    [
+                        38,
+                        49,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        71,
+                        78,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        79,
+                        86,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Assist me in designing an ethnic outfit that pays homage to our cherished ritualistic traditions.\r",
+            {
+                "entities": [
+                    [
+                        26,
+                        32,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        74,
+                        85,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        86,
+                        96,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Share a fashion concept that eloquently communicates the depth of our cultural heritage.\r",
+            {
+                "entities": [
+                    [
+                        70,
+                        78,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        79,
+                        87,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Combine contemporary flair with traditional reverence in an outfit idea.\r",
+            {
+                "entities": [
+                    [
+                        32,
+                        43,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Recommend clothing that respects and reflects our enduring cultural customs.\r",
+            {
+                "entities": [
+                    [
+                        59,
+                        67,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What attire will be the perfect conduit for a ritualistic celebration of our heritage?\r",
+            {
+                "entities": [
+                    [
+                        46,
+                        57,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        77,
+                        85,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Collaborate with me to create a festive outfit that draws inspiration from the rituals of our ancestors.\r",
+            {
+                "entities": [
+                    [
+                        79,
+                        86,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        94,
+                        103,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Offer an outfit suggestion that artfully merges tradition and ritualistic symbolism.\r",
+            {
+                "entities": [
+                    [
+                        48,
+                        57,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        62,
+                        73,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an ethnic ensemble with a modern twist for this cultural festivity.\r",
+            {
+                "entities": [
+                    [
+                        56,
+                        64,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Craft an outfit that encapsulates the vibrancy and history of our folk traditions.\r",
+            {
+                "entities": [
+                    [
+                        66,
+                        70,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        71,
+                        81,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "How should I dress for a festive occasion intertwined with religious significance?\r",
+            {
+                "entities": [
+                    [
+                        59,
+                        68,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Devise a ritualistic costume that serves as a testament to our cultural roots.\r",
+            {
+                "entities": [
+                    [
+                        9,
+                        20,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        63,
+                        71,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Provide a fashion idea that encapsulates the mystique of ancient rituals.\r",
+            {
+                "entities": [
+                    [
+                        57,
+                        64,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        65,
+                        72,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Share outfit ideas that resonate with the profound ritualistic significance of this cherished event.\r",
+            {
+                "entities": [
+                    [
+                        51,
+                        62,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an outfit appropriate for a traditional and cultural celebration.\r",
+            {
+                "entities": [
+                    [
+                        36,
+                        47,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        52,
+                        60,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What clothing choice would be fitting for a festive occasion with ritualistic elements?\r",
+            {
+                "entities": [
+                    [
+                        66,
+                        77,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me put together a folk-inspired ensemble for a cultural festivity.\r",
+            {
+                "entities": [
+                    [
+                        23,
+                        36,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        52,
+                        60,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Provide an idea for traditional attire that reflects my ethnic heritage.\r",
+            {
+                "entities": [
+                    [
+                        20,
+                        31,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        56,
+                        62,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I'm seeking a heritage-infused outfit suitable for a religious ceremony.\r",
+            {
+                "entities": [
+                    [
+                        14,
+                        30,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        53,
+                        62,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Recommend clothing that pays tribute to ancestral customs for this special event.\r",
+            {
+                "entities": [
+                    [
+                        40,
+                        49,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What attire aligns with a traditional festivity deeply rooted in ancient rituals?\r",
+            {
+                "entities": [
+                    [
+                        26,
+                        37,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        65,
+                        72,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        73,
+                        80,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Assist me in designing an ethnic ensemble that honors our ritualistic traditions.\r",
+            {
+                "entities": [
+                    [
+                        26,
+                        32,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        58,
+                        69,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        70,
+                        80,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Offer a fashion concept that captures the essence of our rich cultural heritage.\r",
+            {
+                "entities": [
+                    [
+                        62,
+                        70,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        71,
+                        79,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Blend contemporary style with traditional rituals in an outfit suggestion.\r",
+            {
+                "entities": [
+                    [
+                        30,
+                        41,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        42,
+                        49,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Propose clothing that pays homage to and preserves our cultural customs.\r",
+            {
+                "entities": [
+                    [
+                        55,
+                        63,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear to personify the spirit of a ritualistic celebration of our heritage?\r",
+            {
+                "entities": [
+                    [
+                        48,
+                        59,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        79,
+                        87,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Share an outfit idea that seamlessly merges tradition and ritualistic elements.\r",
+            {
+                "entities": [
+                    [
+                        44,
+                        53,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        58,
+                        69,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an ethnic yet modern attire for this cultural festivity.\r",
+            {
+                "entities": [
+                    [
+                        11,
+                        17,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        45,
+                        53,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Design an outfit that embodies the authenticity of our folk traditions.\r",
+            {
+                "entities": [
+                    [
+                        55,
+                        59,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        60,
+                        70,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "How can I best dress for a joyous gathering with religious connotations?\r",
+            {
+                "entities": [
+                    [
+                        49,
+                        58,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Craft a ritualistic costume that resonates with our cultural roots.\r",
+            {
+                "entities": [
+                    [
+                        8,
+                        19,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        52,
+                        60,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Share outfit ideas that mirror the deep ritualistic significance of this occasion.\r",
+            {
+                "entities": [
+                    [
+                        40,
+                        51,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest a folk-inspired ensemble to express authenticity at this cultural festivity.\r",
+            {
+                "entities": [
+                    [
+                        10,
+                        23,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        65,
+                        73,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Propose an idea for traditional clothing that echoes my ethnic background.\r",
+            {
+                "entities": [
+                    [
+                        20,
+                        31,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        56,
+                        62,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I'm aiming for a heritage-rich outfit that suits a religious ritual.\r",
+            {
+                "entities": [
+                    [
+                        17,
+                        30,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        51,
+                        60,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Share a fashion concept that eloquently conveys the depth of our cultural heritage.\r",
+            {
+                "entities": [
+                    [
+                        65,
+                        73,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        74,
+                        82,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Offer an outfit suggestion that seamlessly blends tradition and ritualistic symbolism.\r",
+            {
+                "entities": [
+                    [
+                        50,
+                        59,
+                        "TRADITIONAL"
+                    ],
+                    [
+                        64,
+                        75,
+                        "TRADITIONAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an outfit for a glamorous party.\r",
+            {
+                "entities": [
+                    [
+                        34,
+                        39,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear to a formal evening party?\r",
+            {
+                "entities": [
+                    [
+                        24,
+                        30,
+                        "FORMAL"
+                    ],
+                    [
+                        39,
+                        44,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me create a stylish party ensemble.\r",
+            {
+                "entities": [
+                    [
+                        25,
+                        30,
+                        "FORMAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me a trendy outfit idea for a night out.\r",
+            {
+                "entities": [
+                    [
+                        35,
+                        44,
+                        "CASUAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I want a chic and festive party outfit suggestion.\r",
+            {
+                "entities": [
+                    [
+                        26,
+                        31,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Recommend clothing and accessories for a lively party.\r",
+            {
+                "entities": [
+                    [
+                        48,
+                        53,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Create a statement look for a themed party.\r",
+            {
+                "entities": [
+                    [
+                        37,
+                        42,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What's the best attire for a cocktail party?\r",
+            {
+                "entities": [
+                    [
+                        38,
+                        43,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I need an outfit idea that's perfect for a rooftop party.\r",
+            {
+                "entities": [
+                    [
+                        51,
+                        56,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest clothing options for an elegant dinner party.\r",
+            {
+                "entities": [
+                    [
+                        47,
+                        52,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me put together a show-stopping party look.\r",
+            {
+                "entities": [
+                    [
+                        37,
+                        42,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me inspiration for a beach party outfit.\r",
+            {
+                "entities": [
+                    [
+                        32,
+                        37,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What kind of attire suits a black-tie party?\r",
+            {
+                "entities": [
+                    [
+                        38,
+                        43,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I'm looking for an outfit idea for a housewarming party.\r",
+            {
+                "entities": [
+                    [
+                        50,
+                        55,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest a fun and flirty party ensemble.\r",
+            {
+                "entities": [
+                    [
+                        25,
+                        30,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Create a dazzling outfit for a New Year's Eve party.\r",
+            {
+                "entities": [
+                    [
+                        46,
+                        51,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear to a masquerade ball?\r",
+            {
+                "entities": [
+                    [
+                        24,
+                        34,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me find the right outfit for a poolside party.\r",
+            {
+                "entities": [
+                    [
+                        45,
+                        50,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me a stylish outfit suggestion for a holiday party.\r",
+            {
+                "entities": [
+                    [
+                        50,
+                        55,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I want a unique and edgy look for a costume party.\r",
+            {
+                "entities": [
+                    [
+                        44,
+                        49,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an outfit that's both comfortable and stylish for a casual party.\r",
+            {
+                "entities": [
+                    [
+                        30,
+                        41,
+                        "CASUAL"
+                    ],
+                    [
+                        60,
+                        66,
+                        "CASUAL"
+                    ],
+                    [
+                        67,
+                        72,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What's the best attire for a summer garden party?\r",
+            {
+                "entities": [
+                    [
+                        43,
+                        48,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me put together a classic outfit for a vintage-themed party.\r",
+            {
+                "entities": [
+                    [
+                        59,
+                        64,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me a modern and trendy party outfit idea.\r",
+            {
+                "entities": [
+                    [
+                        28,
+                        33,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I need an outfit suggestion for a music festival-themed party.\r",
+            {
+                "entities": [
+                    [
+                        56,
+                        61,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Create a sophisticated look for a charity gala.\r",
+            {
+                "entities": [
+                    [
+                        42,
+                        46,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear to a high-energy dance party?\r",
+            {
+                "entities": [
+                    [
+                        42,
+                        47,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I'm looking for an outfit that's perfect for a yacht party.\r",
+            {
+                "entities": [
+                    [
+                        53,
+                        58,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest clothing and accessories for a Hollywood glam party.\r",
+            {
+                "entities": [
+                    [
+                        49,
+                        53,
+                        "PARTY"
+                    ],
+                    [
+                        54,
+                        59,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me find the right outfit for a 90s-themed party.\r",
+            {
+                "entities": [
+                    [
+                        47,
+                        52,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me a stylish outfit idea for a bachelorette party.\r",
+            {
+                "entities": [
+                    [
+                        49,
+                        54,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What kind of attire suits an outdoor barbecue party?\r",
+            {
+                "entities": [
+                    [
+                        46,
+                        51,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I want an outfit suggestion that's both bold and colorful for a neon party.\r",
+            {
+                "entities": [
+                    [
+                        69,
+                        74,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Create a comfortable yet stylish outfit for a pajama party.\r",
+            {
+                "entities": [
+                    [
+                        9,
+                        20,
+                        "CASUAL"
+                    ],
+                    [
+                        53,
+                        58,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Recommend an outfit for a rooftop cocktail party at sunset.\r",
+            {
+                "entities": [
+                    [
+                        43,
+                        48,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me put together a casual-chic outfit for a beach bonfire party.\r",
+            {
+                "entities": [
+                    [
+                        23,
+                        34,
+                        "CASUAL"
+                    ],
+                    [
+                        62,
+                        67,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me a fashion-forward outfit idea for a fashionista's party.\r",
+            {
+                "entities": [
+                    [
+                        58,
+                        63,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear to a sports-themed party while still looking fashionable?\r",
+            {
+                "entities": [
+                    [
+                        38,
+                        43,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an outfit that's appropriate for a corporate holiday party.\r",
+            {
+                "entities": [
+                    [
+                        43,
+                        52,
+                        "FORMAL"
+                    ],
+                    [
+                        61,
+                        66,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I need a versatile outfit suggestion for an all-day pool party.\r",
+            {
+                "entities": [
+                    [
+                        57,
+                        62,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Create a show-stopping outfit for a casino night party.\r",
+            {
+                "entities": [
+                    [
+                        49,
+                        54,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What's the best attire for a Great Gatsby-themed party?\r",
+            {
+                "entities": [
+                    [
+                        49,
+                        54,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me put together a bohemian-inspired outfit for a music party.\r",
+            {
+                "entities": [
+                    [
+                        60,
+                        65,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me an outfit idea that's perfect for a winter wonderland party.\r",
+            {
+                "entities": [
+                    [
+                        62,
+                        67,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest a chic and elegant outfit for a charity fundraising gala.\r",
+            {
+                "entities": [
+                    [
+                        60,
+                        64,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I need a glamorous outfit suggestion for a red carpet-themed party.\r",
+            {
+                "entities": [
+                    [
+                        61,
+                        66,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Recommend clothing and accessories for a tropical luau party.\r",
+            {
+                "entities": [
+                    [
+                        55,
+                        60,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me find the right outfit for a sci-fi and fantasy cosplay party.\r",
+            {
+                "entities": [
+                    [
+                        63,
+                        68,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Create an avant-garde look for an art gallery opening party.\r",
+            {
+                "entities": [
+                    [
+                        54,
+                        59,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear to a rooftop wine and cheese party?\r",
+            {
+                "entities": [
+                    [
+                        48,
+                        53,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I want an outfit suggestion that captures the essence of a masquerade ball.\r",
+            {
+                "entities": [
+                    [
+                        59,
+                        69,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me a modern and edgy outfit idea for an underground dance party.\r",
+            {
+                "entities": [
+                    [
+                        63,
+                        68,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an outfit that's both casual and effortlessly stylish for a backyard barbecue party.\r",
+            {
+                "entities": [
+                    [
+                        30,
+                        36,
+                        "CASUAL"
+                    ],
+                    [
+                        86,
+                        91,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me put together a romantic outfit for a Valentine's Day-themed party.\r",
+            {
+                "entities": [
+                    [
+                        68,
+                        73,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Design a unique outfit for a music concert after-party.\r",
+            {
+                "entities": [
+                    [
+                        43,
+                        54,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What kind of attire suits a 70s disco-themed party?\r",
+            {
+                "entities": [
+                    [
+                        45,
+                        50,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I need an outfit suggestion for a technology and innovation conference after-party.\r",
+            {
+                "entities": [
+                    [
+                        60,
+                        70,
+                        "FORMAL"
+                    ],
+                    [
+                        71,
+                        82,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Create a laid-back yet fashionable outfit for a beach volleyball party.\r",
+            {
+                "entities": [
+                    [
+                        65,
+                        70,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me a bold and vibrant outfit idea for a pride parade after-party.\r",
+            {
+                "entities": [
+                    [
+                        58,
+                        69,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear to a rustic barn party while keeping my style on point?\r",
+            {
+                "entities": [
+                    [
+                        36,
+                        41,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest an outfit that blends elegance and comfort for a garden tea party.\r",
+            {
+                "entities": [
+                    [
+                        43,
+                        50,
+                        "CASUAL"
+                    ],
+                    [
+                        68,
+                        73,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me put together a retro-inspired outfit for a 60s-themed party.\r",
+            {
+                "entities": [
+                    [
+                        62,
+                        67,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me an outfit idea that's perfect for a beach bonfire party under the stars.\r",
+            {
+                "entities": [
+                    [
+                        58,
+                        63,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Create a fashionable outfit for a poolside cocktail party.\r",
+            {
+                "entities": [
+                    [
+                        52,
+                        57,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear to a Hollywood blockbuster movie premiere party?\r",
+            {
+                "entities": [
+                    [
+                        61,
+                        66,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I want an outfit suggestion that embraces the spirit of a carnival-themed party.\r",
+            {
+                "entities": [
+                    [
+                        74,
+                        79,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Recommend clothing and accessories for a wine tasting party.\r",
+            {
+                "entities": [
+                    [
+                        54,
+                        59,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me find the right outfit for a formal dinner party on a luxury yacht.\r",
+            {
+                "entities": [
+                    [
+                        36,
+                        42,
+                        "FORMAL"
+                    ],
+                    [
+                        50,
+                        55,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Design a whimsical and enchanting outfit for a fairy tale-themed party.\r",
+            {
+                "entities": [
+                    [
+                        65,
+                        70,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me an edgy and rebellious outfit idea for a rock and roll party.\r",
+            {
+                "entities": [
+                    [
+                        63,
+                        68,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest a comfortable yet stylish outfit for an outdoor picnic party.\r",
+            {
+                "entities": [
+                    [
+                        63,
+                        68,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What kind of attire suits a garden brunch party with a twist of sophistication?\r",
+            {
+                "entities": [
+                    [
+                        42,
+                        47,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I need an outfit suggestion for an indie music showcase after-party.\r",
+            {
+                "entities": [
+                    [
+                        56,
+                        67,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Help me put together a cozy and warm outfit for a holiday-themed pajama party.\r",
+            {
+                "entities": [
+                    [
+                        72,
+                        77,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Give me a fashion-forward outfit idea for an influencer's party.\r",
+            {
+                "entities": [
+                    [
+                        58,
+                        63,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Recommend an outfit that's perfect for a yacht cruise party at sunset.\r",
+            {
+                "entities": [
+                    [
+                        54,
+                        59,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "What should I wear to a rooftop yoga and meditation party?\r",
+            {
+                "entities": [
+                    [
+                        52,
+                        57,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "Suggest a futuristic and sleek outfit for a sci-fi-themed party.\r",
+            {
+                "entities": [
+                    [
+                        58,
+                        63,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ],
+        [
+            "I want an outfit suggestion that's both elegant and timeless for a black and white party.",
+            {
+                "entities": [
+                    [
+                        83,
+                        88,
+                        "PARTY"
+                    ]
+                ]
+            }
+        ]
+    ]
+
+import pandas as pd
+import spacy
+import os
+from tqdm import tqdm
+from spacy.tokens import DocBin
+
+nlp = spacy.load("en_core_web_sm")
+
+db = DocBin() # create a DocBin object
+
+for text, annot in tqdm(TRAIN_DATA): # data in previous format
+    doc = nlp.make_doc(text) # create doc object from text
+    ents = []
+    for start, end, label in annot["entities"]: # add character indexes
+        span = doc.char_span(start, end, label=label, alignment_mode="contract")
+        if span is None:
+            print("Skipping entity")
+        else:
+            ents.append(span)
+    doc.ents = ents # label the text with the ents
+    db.add(doc)
+
+db.to_disk("./train.spacy") # save the docbin object
+
+nlp1 = spacy.load(r"./output/model-best") #load the best model
+
+
+doc = nlp1("my occasion is casual") # input sample text
+for entity in doc.ents:
+    print(entity.text, entity.label_)

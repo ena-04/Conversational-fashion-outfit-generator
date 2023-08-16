@@ -41,6 +41,12 @@ function ChatBox() {
     }
   };
 
+  const createNewChat = async () => {
+    const response = await axios.post("http://127.0.0.1:5000/fresh-chat", {
+      userMessage: input,
+    });
+  };
+
   //recorder
   const [isRecording, setisRecording] = useState(false);
   const startRecording = () => {
@@ -84,7 +90,10 @@ function ChatBox() {
                   </div>
                 </div>
                 <div className="bg-white px-3 flex items-center hover:bg-gray-200 cursor-pointer">
-                  <div className="ml-4 flex-1 border-b border-gray-400 py-4">
+                  <div
+                    onClick={createNewChat}
+                    className="ml-4 flex-1 border-b border-gray-400 py-4"
+                  >
                     <div className="flex items-bottom justify-between"></div>
                     <h1 className=" ">I'll be back</h1>
                   </div>

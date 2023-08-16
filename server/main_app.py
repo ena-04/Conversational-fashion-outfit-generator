@@ -29,12 +29,6 @@ def bold_text(text):
     return text2
 
 
-def get_recommendations(user_message):
-    # Replace this with your actual recommendation logic
-    bot_response = "Here are some recommended outfits for: " + user_message
-    return bot_response
-
-
 @app.route("/api/recommendations", methods=["POST"])
 @cross_origin(origin="*")
 def get_recommendations():
@@ -57,5 +51,23 @@ def get_recommendations():
     return jsonify({"bot_response": bot_response})
 
 
-if __name__ == "__main__":
+
+
+
+
+@app.route('/fresh-chat', methods=['POST'])
+def fresh_chat():
+    print("creating new conversation thread with bard")
+    
+    # Additional cleanup or shutdown logic can be added here.
+    
+    # Restart the server by using sys.executable to run the current Python script.
+    # os.execl(sys.executable, sys.executable, *sys.argv)
+    global bard
+    bard = Bard(token=token)
+    return jsonify({"bot_response": "bot_response"})
+   
+    
+if __name__ == '__main__':
     app.run(debug=True)
+
