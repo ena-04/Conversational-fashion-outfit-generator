@@ -20,7 +20,7 @@ bard = Bard(token=token)
 vectorizer = TfidfVectorizer()
 
 # Read the content of the text file
-with open("D:\\conversational-fashion-outfit-generator\\server\\data\\greeting_keywords.txt", "r") as file:
+with open("D:\\conversational-fashion-outfit-generator\\server\\data\\fashion_keywords.txt", "r") as file:
     content = file.read()
 
 # Split the content into phrases based on commas
