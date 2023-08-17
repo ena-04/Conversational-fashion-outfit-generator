@@ -19,8 +19,17 @@ bard = Bard(token=token)
 # Initialize the TF-IDF vectorizer
 vectorizer = TfidfVectorizer()
 
+
+
+base_path = os.path.abspath(os.path.dirname(__file__))
+    
+    # Construct the relative path to intents.json
+relative_path = '..\\data\\fashion_keywords.txt'
+file_path = os.path.join(base_path, relative_path)
+    
+
 # Read the content of the text file
-with open("D:\\conversational-fashion-outfit-generator\\server\\data\\fashion_keywords.txt", "r") as file:
+with open(file_path, "r") as file:
     content = file.read()
 
 # Split the content into phrases based on commas
@@ -98,6 +107,11 @@ def fashion_chatbot(user_message):
         return "I'm here to talk about fashion trends and outfits. Please ask me a fashion-related question."
 
 # Example usage
-user_query = "Hello ! what is the news today ?"
-response = fashion_chatbot(user_query)
-print(response)
+while True:
+        
+        user_query = input("You: ")
+        if user_query == "quit":
+            break
+
+        response = fashion_chatbot(user_query)
+        print(response)
