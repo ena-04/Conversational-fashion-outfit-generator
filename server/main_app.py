@@ -104,6 +104,7 @@ initial_prompt=None
 
 
 occasion=[]
+required=["occasion","location","gender","age"]
 location=None
 gender=None
 age=None
@@ -148,16 +149,19 @@ def get_location(prompt):
     main_string_lower = prompt.lower()
     
     for substring in indian_places:
-        if substring.lower() in main_string_lower:
-            detected_place=substring
-    print("detected_place: ")
-    print (detected_place)
+        if substring.strip().lower() in main_string_lower:
+            detected_place = substring.strip()
+            print("detected_place:", detected_place)
+            
     return detected_place
+
+
 
 
 
 def check_prompt(prompt):
     global to_bard
+    global required
     print("checking...")
 
     nlp1 = spacy.load(r"./models/ner_model_occasion/output/model-best") #load the best model
@@ -165,27 +169,20 @@ def check_prompt(prompt):
 
     # occasion=[]
     # location=[]
-    required=[]
+    # required=[]
 
     doc1 = nlp1(prompt) # input sample text
 
     for entity in doc1.ents:
-        # print(entity.text, entity.label_)
+        print("detected_occasion: ",end=" ")
+        print(entity.text, entity.label_)
         occasion.append(entity.label_)
 
-    if not occasion:
-        # print("occasion reqd")
-        required.append("occasion")
+    if occasion:
+        if "occasion" in required:
+            required.remove("occasion")
+
     
-    global location
-    if not location:
-        location=get_location(prompt)
-    
-    if not location:
-        # print("location reqd")
-        required.append("location")
-    # else:
-        # for loc in location: print ("**"+loc)
 
 
     substrings = ["man", "woman", "girl", "boy","lady","male","female","baby"]
@@ -198,9 +195,18 @@ def check_prompt(prompt):
             
             gender=substring
             print("detected_gender: "+gender)
-    if not gender:
-        required.append("gender")
+    if gender:
+        if "gender" in required:
+            required.remove("gender")
 
+
+    global location
+    if not location:
+        location=get_location(prompt)
+    
+    if location:
+        if "location" in required:
+            required.remove("location")
     
     pattern = r'\d+'  # Regular expression pattern for one or more digits
     global age
@@ -210,23 +216,32 @@ def check_prompt(prompt):
         age2=" ".join(age)
         age=age2
         print("detected_age: "+age)
-    if not age:
-        required.append("age")
+    if age:
+        if "age" in required:
+            required.remove("age")
 
     response=None  
     if not required:
         to_bard= True
         return response
     
-    response="Please add "
+    if required[0]=="occasion":
+        response="Sure! Please add "+required[0]+" for which you want the suggestion"
+    elif required[0]=="gender":
+        response="Further tell me your "+required[0]
+    elif required[0]=="location":
+        response="Where is the "+required[0]+" you are from?"
+    else:
+        response="Finally tell me how old are you?"
 
-    for index, req in enumerate(required):
-        # print("printing reqd")
-        response+=req
-        if index != (len(required) - 1):
-            response+=" and "
 
-    response+=" for which you want the suggestion"
+    # for index, req in enumerate(required):
+    #     # print("printing reqd")
+    #     response+=req
+    #     if index != (len(required) - 1):
+    #         response+=" and "
+
+    # response+=" for which you want the suggestion"
 
     to_bard= False
     return response

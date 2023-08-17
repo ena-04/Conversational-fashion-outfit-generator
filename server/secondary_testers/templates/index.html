@@ -12,7 +12,9 @@
         {% for image in result.images %}
         <img src="{{ image }}" alt="Image">
         <br>
-        <a href="{{ image }}" target="_blank">{{ image }}</a>
+        {% endfor %}
+        {% for link in result.prod_links %}
+        <a href="{{ link }}" target="_blank">{{ link }}</a>
         <br>
         {% endfor %}
     </div>
