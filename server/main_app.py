@@ -1,20 +1,20 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, request, jsonify
 from bardapi import Bard
 import os
 from dotenv.main import load_dotenv
-import sys
-import random
-import json
-import torch
+# import sys
+# import random
+# import json
+# import torch
 import spacy
 import re
 import pandas as pd
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.naive_bayes import MultinomialNB
-from sklearn.metrics.pairwise import cosine_similarity
+# from sklearn.feature_extraction.text import TfidfVectorizer
+# from sklearn.naive_bayes import MultinomialNB
+# from sklearn.metrics.pairwise import cosine_similarity
 
-from model import NeuralNet
-from nltk_utils import bag_of_words, tokenize
+# from model import NeuralNet
+# from nltk_utils import bag_of_words, tokenize
 
 
 from flask_cors import CORS, cross_origin
@@ -37,34 +37,34 @@ CORS(app)
 
 # D:\Neha\web development\Conversational-fashion-outfit-generator\server\main_app.py
 
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+# device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-base_path = os.path.abspath(os.path.dirname(__file__))
+# base_path = os.path.abspath(os.path.dirname(__file__))
     
-    # Construct the relative path to intents.json
-relative_path = '.\chatbot\intents.json'
-file_path = os.path.join(base_path, relative_path)
+#     # Construct the relative path to intents.json
+# relative_path = '.\chatbot\intents.json'
+# file_path = os.path.join(base_path, relative_path)
 
-    # D:\Neha\web development\Conversational-fashion-outfit-generator\server\chatbot\intents.json
-    # Open and read the JSON file
+#     # D:\Neha\web development\Conversational-fashion-outfit-generator\server\chatbot\intents.json
+#     # Open and read the JSON file
     
 
-with open(file_path, 'r') as json_data:
-    intents = json.load(json_data)
+# with open(file_path, 'r') as json_data:
+#     intents = json.load(json_data)
 
-FILE = ".\chatbot\data.pth"
-data = torch.load(FILE)
+# FILE = ".\chatbot\data.pth"
+# data = torch.load(FILE)
 
-input_size = data["input_size"]
-hidden_size = data["hidden_size"]
-output_size = data["output_size"]
-all_words = data['all_words']
-tags = data['tags']
-model_state = data["model_state"]
+# input_size = data["input_size"]
+# hidden_size = data["hidden_size"]
+# output_size = data["output_size"]
+# all_words = data['all_words']
+# tags = data['tags']
+# model_state = data["model_state"]
 
-model = NeuralNet(input_size, hidden_size, output_size).to(device)
-model.load_state_dict(model_state)
-model.eval()
+# model = NeuralNet(input_size, hidden_size, output_size).to(device)
+# model.load_state_dict(model_state)
+# model.eval()
 
 
 
@@ -78,25 +78,25 @@ def bold_text(text):
     text2 = text1.replace("** ", "</b> ")
     return text2
 
-def get_answer_bot(msg):
-    sentence = tokenize(msg)
-    X = bag_of_words(sentence, all_words)
-    X = X.reshape(1, X.shape[0])
-    X = torch.from_numpy(X).to(device)
+# def get_answer_bot(msg):
+#     sentence = tokenize(msg)
+#     X = bag_of_words(sentence, all_words)
+#     X = X.reshape(1, X.shape[0])
+#     X = torch.from_numpy(X).to(device)
 
-    output = model(X)
-    _, predicted = torch.max(output, dim=1)
+#     output = model(X)
+#     _, predicted = torch.max(output, dim=1)
 
-    tag = tags[predicted.item()]
+#     tag = tags[predicted.item()]
 
-    probs = torch.softmax(output, dim=1)
-    prob = probs[0][predicted.item()]
-    if prob.item() > 0.75:
-        for intent in intents['intents']:
-            if tag == intent["tag"]:
-                return random.choice(intent['responses'])
+#     probs = torch.softmax(output, dim=1)
+#     prob = probs[0][predicted.item()]
+#     if prob.item() > 0.75:
+#         for intent in intents['intents']:
+#             if tag == intent["tag"]:
+#                 return random.choice(intent['responses'])
     
-    return "I do not understand..."
+#     return "I do not understand..."
 
 to_bard=False
 count=0
@@ -123,28 +123,6 @@ def get_location(prompt):
     indian_places = data['place_name']
 
 
-    # # Initialize TF-IDF vectorizer
-    # tfidf_vectorizer = TfidfVectorizer(max_features=5000)
-
-    # # Transform the Indian place names into TF-IDF features
-    # indian_places_tfidf = tfidf_vectorizer.fit_transform(indian_places)
-
-    # # Initialize and train a Naive Bayes classifier
-    # naive_bayes_classifier = MultinomialNB()
-    # naive_bayes_classifier.fit(indian_places_tfidf, indian_places)
-
-
-    # # Tokenize and transform the user prompt into TF-IDF features
-    # user_prompt_tfidf = tfidf_vectorizer.transform([prompt])
-
-    # # Calculate cosine similarity between user prompt and Indian place names
-    # cosine_similarities = cosine_similarity(user_prompt_tfidf, indian_places_tfidf)
-
-    # # Find the index of the most similar Indian place
-    # most_similar_index = cosine_similarities.argmax()
-
-    # # Get the corresponding place name
-    # detected_place = indian_places.iloc[most_similar_index]
     detected_place=None
     main_string_lower = prompt.lower()
     
@@ -152,7 +130,7 @@ def get_location(prompt):
         if substring.strip().lower() in main_string_lower:
             detected_place = substring.strip()
             print("detected_place:", detected_place)
-            
+
     return detected_place
 
 
@@ -234,15 +212,6 @@ def check_prompt(prompt):
     else:
         response="Finally tell me how old are you?"
 
-
-    # for index, req in enumerate(required):
-    #     # print("printing reqd")
-    #     response+=req
-    #     if index != (len(required) - 1):
-    #         response+=" and "
-
-    # response+=" for which you want the suggestion"
-
     to_bard= False
     return response
 
@@ -272,9 +241,7 @@ def get_recommendations():
 
 
         if to_bard==False:
-                resp = 'I do not understand...'
-
-                if resp=='I do not understand...':
+                
                     count+=1
                     if count==1:
                         global initial_prompt
@@ -289,8 +256,7 @@ def get_recommendations():
                     else:
                          bot_response=resp
                 
-                else:
-                    bot_response=resp
+                
         if to_bard==True:
                 bot_response=get_answer_bard(user_message)
         
