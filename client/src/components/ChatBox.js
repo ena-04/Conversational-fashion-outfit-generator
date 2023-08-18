@@ -6,7 +6,12 @@ import SpeechRecognition, {
 
 function ChatBox() {
   const [input, setInput] = useState("");
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState([
+    {
+      text: "Welcome to the Conversational Fashion Outfit Generator! I'm here to assist you in finding the perfect outfit for the day. Based on your input, I'll suggest outfit options that match your preferences. Let's get started!",
+      isUser: false,
+    },
+  ]);
 
   const sendMessage = async () => {
     if (!input.trim()) return;
@@ -42,8 +47,14 @@ function ChatBox() {
   };
 
   const createNewChat = async () => {
+    setMessages([
+      {
+        text: "Welcome to the Conversational Fashion Outfit Generator! I'm here to assist you in finding the perfect outfit for the day. Based on your input, I'll suggest outfit options that match your preferences. Let's get started!",
+        isUser: false,
+      },
+    ]);
     const response = await axios.post("http://127.0.0.1:5000/fresh-chat", {
-      userMessage: input,
+      userMessage: null,
     });
   };
 
@@ -95,13 +106,7 @@ function ChatBox() {
                     className="ml-4 flex-1 border-b border-gray-400 py-4"
                   >
                     <div className="flex items-bottom justify-between"></div>
-                    <h1 className=" ">I'll be back</h1>
-                  </div>
-                </div>
-                <div className="bg-white px-3 flex items-center hover:bg-gray-200 cursor-pointer">
-                  <div className="ml-4 flex-1 border-b border-gray-400 py-4">
-                    <div className="flex items-bottom justify-between"></div>
-                    <h1 className=" ">Hold the line!</h1>
+                    <h1 className=" ">Create a fresh conversation</h1>
                   </div>
                 </div>
               </div>

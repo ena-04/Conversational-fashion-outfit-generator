@@ -204,13 +204,13 @@ def check_prompt(prompt):
         return response
     
     if required[0]=="occasion":
-        response="Sure! Please add "+required[0]+" for which you want the suggestion"
+        response="Sure! Could you please specify the occasion for which you need an outfit? This will help me narrow down the options and suggest something appropriate.\nChoose one of the following: \n * casual \n * formal \n* party \n* traditional"
     elif required[0]=="gender":
-        response="Further tell me your "+required[0]
+        response="Great! Now, could you also let me know your gender? This will help me tailor the outfit suggestions to your style."
     elif required[0]=="location":
-        response="Where is the "+required[0]+" you are from?"
+        response="Thank you! Could you provide me with your location? This will help me consider the local weather and suggest outfits that are suitable for your area."
     else:
-        response="Finally tell me how old are you?"
+        response="Got it, thanks! Lastly, may I ask how old you are? This will help me suggest outfits that are suitable for your age."
 
     to_bard= False
     return response
@@ -218,10 +218,37 @@ def check_prompt(prompt):
 
 
 def get_answer_bard(prompt):
-    prompt+=", suggest a single entire outfit idea with top, bottom, shoes, jewelry and accessories. Do not give additional tips and information. Keep your response very short within 100 words."
+
+    prompt+=", suggest a single outfit specifically with details in 5 points as top, bottom, shoes, jewelry and accessories. Do not give additional tips and information. Keep your response very short within 100 words."
     result = bard.get_answer(prompt)
     print(result)
     bard_response = result["content"]
+
+
+    output = ""
+    lines = bard_response.split('\n\n')[:3]
+
+
+
+    for line in lines:
+        line = line.strip()
+        # if line.startswith('*') or line == "":
+        output += line + '\n\n'
+
+    bard_response=output
+
+
+    items = []
+    lines = output.split('\n')
+
+    for line in lines:
+        line = line.strip()
+        if line.startswith('*'):
+            items.append(line.split('*')[1].strip().split(':')[1].strip())
+
+    print(items)
+
+
     lines = bard_response.split("\n")
     filtered_lines = [line for line in lines if not line.startswith("[Image")]
     filtered_response = "\n".join(filtered_lines)
@@ -250,7 +277,11 @@ def get_recommendations():
                     if to_bard==True:
                         
                         occasion2=" ".join(occasion)
+                        print("Finally...")
                         print("detected_occasion: "+occasion2)
+                        print("detected_age: "+age)
+                        print("detected_gender: "+gender)
+                        print("detected_location: "+location)
                         user_message=initial_prompt+" I am "+age+" years old "+gender+" from "+location+", occasion is "+occasion2+", my colour preferences are "+colours
 
                     else:
@@ -278,6 +309,23 @@ def fresh_chat():
     # os.execl(sys.executable, sys.executable, *sys.argv)
     global bard
     bard = Bard(token=token)
+    global to_bard
+    to_bard=False
+    global count
+    count=0
+
+
+    global occasion
+    occasion=[]
+    global required
+    required=["occasion","location","gender","age"]
+    global location
+    location=None
+    global gender
+    gender=None
+    global age
+    age=None
+
     return jsonify({"bot_response": "bot_response"})
    
     
