@@ -3,56 +3,56 @@ import axios from "axios";
 import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
+import { Intro } from "./Intro";
 
 function ChatBox() {
   const [input, setInput] = useState("");
-  const [messages, setMessages] = useState([
-    {
-      text: "Welcome to the Conversational Fashion Outfit Generator! I'm here to assist you in finding the perfect outfit for the day. Based on your input, I'll suggest outfit options that match your preferences. Let's get started!",
-      isUser: false,
-    },
-  ]);
+  const [messages, setMessages] = useState([]);
+  // const [sample, setSample] = useState(false);
+  // const [input, setInput] = useState("");
 
-  const sendMessage = async () => {
-    if (!input.trim()) return;
+  const sendMessage = async (textbtn) => {
+    console.log(textbtn);
+    let sample;
+
+    if (typeof textbtn == "string") sample = true;
+    console.log(sample);
+    if (!sample) if (!input.trim()) return;
     console.log(input);
     try {
       setInput("");
       setMessages([
         ...messages,
-        { text: input, isUser: true },
+        { text: sample ? textbtn : input, isUser: true },
         { text: "generating...", isUser: false },
       ]);
 
       const response = await axios.post(
         "http://127.0.0.1:5000/api/recommendations",
         {
-          userMessage: input,
+          userMessage: sample ? textbtn : input,
         }
       );
+
       const botResponse = response.data.bot_response;
       setMessages([
         ...messages,
-        { text: input, isUser: true },
+        { text: sample ? textbtn : input, isUser: true },
         { text: botResponse, isUser: false },
       ]);
     } catch (error) {
       setMessages([
         ...messages,
-        { text: input, isUser: true },
+        { text: sample ? textbtn : input, isUser: true },
         { text: `error generating response: ${error.message}`, isUser: false },
       ]);
       console.error("Error fetching bot response:", error);
     }
+    // setSample(false);
   };
 
   const createNewChat = async () => {
-    setMessages([
-      {
-        text: "Welcome to the Conversational Fashion Outfit Generator! I'm here to assist you in finding the perfect outfit for the day. Based on your input, I'll suggest outfit options that match your preferences. Let's get started!",
-        isUser: false,
-      },
-    ]);
+    setMessages([]);
     const response = await axios.post("http://127.0.0.1:5000/fresh-chat", {
       userMessage: null,
     });
@@ -123,8 +123,63 @@ function ChatBox() {
                 </div>
               </div>
 
+              {/* <Intro /> */}
+
+              <>
+                <div className="py-2 px-3">
+                  <div className={"flex mb-2"}>
+                    <div className={"rounded py-2 px-3 bg-gray-50"}>
+                      <p className="text-sm ">
+                        <p>
+                          Welcome to the Conversational Fashion Outfit
+                          Generator! I'm here to assist you in finding the
+                          perfect outfit for the day. Based on your input, I'll
+                          suggest outfit options that match your preferences.
+                          Let's get started!
+                        </p>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="px-3">
+                  <div className={"flex mb-2"}>
+                    <button
+                      onClick={() => {
+                        // setSample(true);
+                        sendMessage("What should I wear for my job interview?");
+                      }}
+                      className="border-2 border-blue-200 rounded-2xl py-1 px-2 bg-blue-100 mr-2 text-sm"
+                    >
+                      What should I wear for my job interview?
+                    </button>
+                    <button
+                      onClick={() => {
+                        // setSample(true);
+                        sendMessage("Suggest me an outfit for Diwali.");
+                      }}
+                      className="border-2 border-blue-200 rounded-2xl py-1 px-2 bg-blue-100 mr-2 text-sm"
+                    >
+                      <p className=" ">Suggest me an outfit for Diwali.</p>
+                    </button>
+                    <button
+                      onClick={() => {
+                        // setSample(true);
+                        sendMessage(
+                          "Give me an outfit for a girls' night out."
+                        );
+                      }}
+                      className="border-2 border-blue-200 rounded-2xl py-1 px-2 bg-blue-100 mr-2 text-sm"
+                    >
+                      <p className="text-sm ">
+                        Give me an outfit for a girls' night out.
+                      </p>
+                    </button>
+                  </div>
+                </div>
+              </>
               {/* <!-- Messages --> */}
-              <div className="flex-1 overflow-auto bg-gray-200 border-yellow-300 border-2">
+
+              <div className="flex-1 overflow-auto bg-gray-200">
                 <div className="py-2 px-3">
                   {messages.map((message, index) => (
                     <div
@@ -140,7 +195,7 @@ function ChatBox() {
                             : "rounded py-2 px-3 bg-gray-50"
                         }
                       >
-                        <p className="text-sm mt-1">
+                        <p className="text-sm ">
                           {message.text.split("\n").map((i) => {
                             return (
                               <p>
