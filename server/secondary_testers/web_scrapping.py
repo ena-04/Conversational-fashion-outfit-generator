@@ -14,21 +14,24 @@ def find_image_class(url):
         return None
     
     soup = BeautifulSoup(html_content, 'html.parser')
-    img_tag = soup.find('img')
+    img_tags = soup.find_all('img', class_='_2r_T1I')
     
-    if img_tag:
-        img_class = img_tag.get('class')
-        return img_class
-    else:
-        img_tags = soup.find_all('img')  # Find all img tags
-        img_class = None
-        img_urls = []
+    # if img_tag:
+    #     img_class = img_tag.get('class')
+    #     return img_class
+    # else:
+    #     img_tags = soup.find_all('img')  # Find all img tags
+    #     img_class = None
+    #     img_urls = []
         
-        if img_tags:
+    if img_tags:
             img_class = img_tags[0].get('class')
-            img_urls = [img.get('src') for img in img_tags[:5]]  # Get top 5 image URLs
+            img_urls = [img['src'] for img in img_tags[:5]]  # Get top 5 image URLs
+
+            for image in img_urls:
+                 print(image)
         
-        return img_class, img_urls
+    return img_class, img_urls
 
 @app.route('/')
 def identify_image_class():

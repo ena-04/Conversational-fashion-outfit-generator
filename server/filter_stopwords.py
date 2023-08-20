@@ -1,6 +1,6 @@
-item_list=['Anarkali suit in pink, black, and purple with a matching salwar.', 'Pumps in black or purple.', 'Traditional jewelry such as a necklace, earrings, and bangles.', 'A bindi and mehndi to complete the look.']
+# item_list=['Anarkali suit in pink, black, and purple with a matching salwar.', 'Pumps in black or purple.', 'Traditional jewelry such as a necklace, earrings, and bangles.', 'A bindi and mehndi to complete the look.']
 
-
+from main_app import item_list
 # * A long, pink maxi dress with a black belt and a slit up the side.
 
 # * Black high heels or sandals.
