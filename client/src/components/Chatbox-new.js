@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
-import { Intro } from "./Intro";
+// import { Intro } from "./Intro";
+import { Loading } from "./Loading";
 
 function ChatBox() {
   const [input, setInput] = useState("");
@@ -23,8 +24,8 @@ function ChatBox() {
       setInput("");
       setMessages([
         ...messages,
-        { text: sample ? textbtn : input, isUser: true },
-        { text: "generating...", isUser: false },
+        { text: sample ? textbtn : input, isUser: true, loading: false },
+        { text: "generating...", isUser: false, loading: true },
       ]);
 
       const response = await axios.post(
@@ -37,14 +38,18 @@ function ChatBox() {
       const botResponse = response.data.bot_response;
       setMessages([
         ...messages,
-        { text: sample ? textbtn : input, isUser: true },
-        { text: botResponse, isUser: false },
+        { text: sample ? textbtn : input, isUser: true, loading: false },
+        { text: botResponse, isUser: false, loading: false },
       ]);
     } catch (error) {
       setMessages([
         ...messages,
-        { text: sample ? textbtn : input, isUser: true },
-        { text: `error generating response: ${error.message}`, isUser: false },
+        { text: sample ? textbtn : input, isUser: true, loading: false },
+        {
+          text: `error generating response: ${error.message}`,
+          isUser: false,
+          loading: false,
+        },
       ]);
       console.error("Error fetching bot response:", error);
     }
@@ -57,6 +62,15 @@ function ChatBox() {
       userMessage: null,
     });
   };
+  const messagesEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   //recorder
   const [isRecording, setisRecording] = useState(false);
@@ -256,18 +270,27 @@ function ChatBox() {
                             : "rounded py-2 px-3 bg-gray-50"
                         }
                       >
-                        <p className="text-sm ">
-                          {message.text.split("\n").map((i) => {
-                            return (
-                              <p>
-                                <div dangerouslySetInnerHTML={{ __html: i }} />
-                              </p>
-                            );
-                          })}
-                        </p>
+                        {message.loading ? (
+                          <Loading />
+                        ) : (
+                          <>
+                            <p className="text-sm ">
+                              {message.text.split("\n").map((i) => {
+                                return (
+                                  <p>
+                                    <div
+                                      dangerouslySetInnerHTML={{ __html: i }}
+                                    />
+                                  </p>
+                                );
+                              })}
+                            </p>
+                          </>
+                        )}
                       </div>
                     </div>
                   ))}
+                  <div ref={messagesEndRef} />
                 </div>
               </div>
 
