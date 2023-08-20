@@ -1,51 +1,48 @@
 import requests
 from bs4 import BeautifulSoup
-from urllib.parse import unquote
-from flask import Flask, render_template
-# from filters import flipkart_url
+from flask import Flask, render_template 
+from filters import flipkart_url
 
 app = Flask(__name__)
 
-def scrape_flipkart():
-    flipkart_url=
-    base_url = flipkart_url  # Use the Flipkart URL from filters.py
-    response = requests.get(base_url)
-
+def find_image_class(url):
+    response = requests.get(url)
+    
     if response.status_code == 200:
-        soup = BeautifulSoup(response.content, "html.parser")
-        product_containers = soup.find_all("div", class_="_1AtVbE")
-
-        results = []
-
-        for container in product_containers[:3]:  # Get top 3 products
-            title = container.find("a", class_="IRpwTa")
-            if title:
-                title = title.text
-
-            image_tag = container.find("img", class_="_396cs4")
-            if image_tag:
-                img_url = image_tag.get("src")
-                img_url = unquote(img_url)
-
-            product_link = container.find("a", class_="_2UzuFa")
-            if product_link:
-                product_link = product_link["href"]
-
-            if title and img_url and product_link:
-                results.append({
-                    'product_title': title,
-                    'image_url': img_url,
-                    'product_link': product_link
-                })
-
-        return results
+        html_content = response.text
     else:
-        return []
+        return None
+    
+    soup = BeautifulSoup(html_content, 'html.parser')
+    img_tag = soup.find('img')
+    
+    if img_tag:
+        img_class = img_tag.get('class')
+        return img_class
+    else:
+        img_tags = soup.find_all('img')  # Find all img tags
+        img_class = None
+        img_urls = []
+        
+        if img_tags:
+            img_class = img_tags[0].get('class')
+            img_urls = [img.get('src') for img in img_tags[:5]]  # Get top 5 image URLs
+        
+        return img_class, img_urls
 
 @app.route('/')
-def index():
-    results = scrape_flipkart()
-    return render_template('index.html', results=results)
+def identify_image_class():
+    url = flipkart_url  # Use the actual URL here
+    
+    result = find_image_class(url)
+    
+    if isinstance(result, tuple) and len(result) == 2:
+        img_class, img_urls = result
+    else:
+        img_class = result
+        img_urls = []
+
+    return render_template('index.html', image_class=img_class, image_urls=img_urls)
 
 if __name__ == '__main__':
     app.run(debug=True)
