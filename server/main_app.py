@@ -2,20 +2,18 @@ from flask import Flask, request, jsonify
 from bardapi import Bard
 import os
 from dotenv.main import load_dotenv
-# import sys
-# import random
-# import json
-# import torch
+# from image_links import identify_image_class
+
+
+import requests
+from bs4 import BeautifulSoup
+# from filters import all_generated_urls
+
+
 import spacy
 import re
 import pandas as pd
-# from sklearn.feature_extraction.text import TfidfVectorizer
-# from sklearn.naive_bayes import MultinomialNB
-# from sklearn.metrics.pairwise import cosine_similarity
-
-# from model import NeuralNet
-# from nltk_utils import bag_of_words, tokenize
-
+import string
 
 from flask_cors import CORS, cross_origin
 
@@ -35,42 +33,6 @@ app = Flask(__name__)
 CORS(app)
 
 
-# D:\Neha\web development\Conversational-fashion-outfit-generator\server\main_app.py
-
-# device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-
-# base_path = os.path.abspath(os.path.dirname(__file__))
-    
-#     # Construct the relative path to intents.json
-# relative_path = '.\chatbot\intents.json'
-# file_path = os.path.join(base_path, relative_path)
-
-#     # D:\Neha\web development\Conversational-fashion-outfit-generator\server\chatbot\intents.json
-#     # Open and read the JSON file
-    
-
-# with open(file_path, 'r') as json_data:
-#     intents = json.load(json_data)
-
-# FILE = ".\chatbot\data.pth"
-# data = torch.load(FILE)
-
-# input_size = data["input_size"]
-# hidden_size = data["hidden_size"]
-# output_size = data["output_size"]
-# all_words = data['all_words']
-# tags = data['tags']
-# model_state = data["model_state"]
-
-# model = NeuralNet(input_size, hidden_size, output_size).to(device)
-# model.load_state_dict(model_state)
-# model.eval()
-
-
-
-
-
-
 
 
 def bold_text(text):
@@ -78,25 +40,6 @@ def bold_text(text):
     text2 = text1.replace("** ", "</b> ")
     return text2
 
-# def get_answer_bot(msg):
-#     sentence = tokenize(msg)
-#     X = bag_of_words(sentence, all_words)
-#     X = X.reshape(1, X.shape[0])
-#     X = torch.from_numpy(X).to(device)
-
-#     output = model(X)
-#     _, predicted = torch.max(output, dim=1)
-
-#     tag = tags[predicted.item()]
-
-#     probs = torch.softmax(output, dim=1)
-#     prob = probs[0][predicted.item()]
-#     if prob.item() > 0.75:
-#         for intent in intents['intents']:
-#             if tag == intent["tag"]:
-#                 return random.choice(intent['responses'])
-    
-#     return "I do not understand..."
 
 to_bard=False
 count=0
@@ -217,6 +160,176 @@ def check_prompt(prompt):
 
 
 
+
+
+def find_image_class(url):
+    response = requests.get(url,verify=False)
+    
+    if response.status_code == 200:
+        html_content = response.text
+    else:
+        return None
+    
+    soup = BeautifulSoup(html_content, 'html.parser')
+    img_tags = soup.find_all('img', class_='_2r_T1I')
+    img_tags2 = soup.find_all('img', class_='_396cs4')
+    img_urls=[]  
+
+    if img_tags:
+          
+            img_urls = [img['src'] for img in img_tags[:5]]  # Get top 5 image URLs
+
+            for image in img_urls:
+                 print(image)
+    elif img_tags2:
+        img_urls = [img['src'] for img in img_tags2[:5]]  # Get top 5 image URLs
+
+        for image in img_urls:
+                 print(image)
+    print("printing each result: ")   
+    print(img_urls)
+    return img_urls
+
+
+def identify_image_class(all_generated_urls):
+    all_image_urls = []
+    for i in all_generated_urls:
+        url = i  # Use the actual URL here
+        img_urls = []
+        result = find_image_class(url)
+    
+        # if isinstance(result, tuple):
+        #     img_urls = result
+        if result:
+            # for item in result:
+                all_image_urls.append(result)
+    print("printing all urls:")
+    print(all_image_urls)
+
+    return all_image_urls
+
+
+
+def get_filtered_list(item_list):
+    nlp = spacy.load("en_core_web_sm")
+
+    # Define your custom stopwords
+    custom_stopwords = ['matching','complete','look']
+
+    # Define a translation table to remove punctuations
+    translator = str.maketrans("", "", string.punctuation)
+
+    # Extend the stopwords list
+    nlp.Defaults.stop_words |= set(custom_stopwords)
+
+    filtered_list=[]
+
+    for item in item_list:
+
+        # Process the text with spaCy
+        doc = nlp(item)
+
+        # Create a list of tokens without stopwords and punctuations
+        filtered_tokens = [token.text.translate(translator) for token in doc if not token.is_stop]
+
+        # Join the filtered tokens back into a sentence
+        filtered_sentence = ' '.join(filtered_tokens)
+
+        filtered_list.append(filtered_sentence)
+    print("stopwords filtered list:")
+    print(filtered_list)
+    return filtered_list
+
+
+
+from collections import defaultdict
+import nltk
+from nltk.tokenize import word_tokenize
+from collections import defaultdict
+from urllib.parse import quote
+# from filter_stopwords import filtered_list
+# from flipkart_links import generate_flipkart_url
+
+
+def generate_flipkart_url(search_query, filters):
+    base_url = "https://www.flipkart.com/search?q="
+    search_query = quote(search_query)
+    # search_query = search_query.replace(" ", "%20")
+    url = f"{base_url}{search_query}&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=off&as=off"
+
+    if filters:
+        filter_string = "&" + "&".join(filters)
+        url += filter_string
+
+    return url
+
+
+def extract_keywords(user_query, keyword_lists):
+    tokens = word_tokenize(user_query)
+    keywords = defaultdict(list)
+    
+    for token in tokens:
+        for keyword_type, keyword_list in keyword_lists.items():
+            if token.lower() in keyword_list:
+                keywords[keyword_type].append(token.lower())
+                
+    return keywords
+
+def capitalize_first_letter(keyword_list):
+    capitalized_keywords = []
+    for keyword in keyword_list:
+        capitalized_keyword = keyword.capitalize() if isinstance(keyword, str) else keyword
+        capitalized_keywords.append(capitalized_keyword)
+    return capitalized_keywords
+
+
+
+def generate_urls(filtered_list):
+    all_generated_urls = []
+    # Example user query
+    for i in filtered_list:
+        user_query = i
+
+        # Keyword lists for different categories
+        keyword_lists = {
+        "gender":["Men","Women","Boys","Girls","Baby Boys","Unisex","Baby Boys & Baby Girls","Boys & Girls","Baby Girls"],
+        "occasion": ["party", "casual", "formal", "beach", "wedding", "lounge", "sports","festive"],
+        "color": ["Black","Pink","Multicolor","Blue","Yellow","White","Beige","Brown","Dark Blue","Dark Green","Gold","Green","Grey","Light Blue","Light Green","Maroon","Orange","Purple","Red","Cream","Magenta","Mustard","Silver","Khaki","Dark Grey"],
+        "type": ["Maxi","A-line","Fit and Flare","Bodycon","Kaftan","Shirt","Asymmetric","Blouson","Cinched Waist","Co-ords","Drop Waist","Empire Waist","Ethnic Dress","Gathered","Gown","High Low","Layered","Peplum","Pleated","Ribbed,Ruffled","Sheath","Sheer","Skater","Sweater","T Shirt,Tiered","Two Piece Dress","Wrap","Tank Top"],
+
+        "dress_length": ["midi", "mini", "ankle", "below knee","knee length","above knee","ankle length"],
+
+        "sleeve length": ["Full Sleeve","3/4 Sleeve","Half Sleeve","Short Sleeve","Sleeveless","Roll-up Sleeve","3/4th Sleeve","sleeveless", "short", "long", "half"],
+
+        "pattern": ["Solid","Washed","Ethnic Motifs","Ombre","Chevron/Zig Zag","Animal Print","Checkered","Colorblock","Embellished","Embroidered","Floral Print","Geometric Print","Graphic Print","Polka Print","Printed","Self Design","Striped","Tie & Dye","Woven Design","Military Camouflage","Color Block","Dyed/Ombre","Applique","Chevron","Embossed","Houndstooth","Lace","Laser Cut","Paisley","Tribal","Woven","solid", "floral", "striped", "chevron","embroidered"],
+
+        "neck": ["v-neck", "scoop neck", "round neck", "boat", "halter neck", "sweetheart neck","u-shaped","sphagetti","choker neck","asymmetric","high neck","keyhole","ruffle","square"]
+        }
+
+        # Extracted keywords
+        extracted_keywords = extract_keywords(user_query, keyword_lists)
+        print("for item:")
+        print(i)
+        print("Extracted Keywords:", extracted_keywords)
+
+        # Capitalize the extracted keywords
+        capitalized_keywords = {category: capitalize_first_letter(values) for category, values in extracted_keywords.items()}
+
+        filters = []
+
+        for category, values in capitalized_keywords.items():
+            if values:
+                encoded_values = [quote(value) for value in values]
+                filters.append(f"p%5B%5D=facets.{category}%255B%255D%3D{','.join(encoded_values)}")
+
+        flipkart_url = generate_flipkart_url(user_query, filters)
+        flipkart_url += "&sort=popularity" 
+        all_generated_urls.append(flipkart_url)
+    print("printing flipkart urls:")
+    print(all_generated_urls)
+    return all_generated_urls
+
+
 def get_answer_bard(prompt):
 
     prompt+=", suggest a single outfit specifically with details in 5 points as top, bottom, shoes, jewelry and accessories. Do not give additional tips and information. Keep your response very short within 100 words."
@@ -245,7 +358,7 @@ def get_answer_bard(prompt):
         line = line.strip()
         if line.startswith('*'):
             # output.append(line)
-            item_parts = line.split(':*')
+            item_parts = line.split(':**')
             if len(item_parts) > 1:
                 item_list.append(item_parts[1].strip())
             else:
@@ -253,11 +366,38 @@ def get_answer_bard(prompt):
 
     print(item_list)
 
+    filtered_list=get_filtered_list(item_list)
+
+    all_generated_urls=generate_urls(filtered_list)
+
+    product_urls=identify_image_class(all_generated_urls)
+
 
     lines = bard_response.split("\n")
     filtered_lines = [line for line in lines if not line.startswith("[Image")]
     filtered_response = "\n".join(filtered_lines)
-    return bold_text(filtered_response)
+    bold_resp=bold_text(filtered_response)
+
+    lines2 = bold_resp.split('\n')
+
+    new_resp=""
+    ind=-1
+    for line in lines2:
+        line = line.strip()
+        if line.startswith('*'):
+            ind+=1
+            new_resp+=line+'\n <div class="flex m-2">'
+            for url in product_urls[ind]:
+                new_resp+='<img class="m-2" src=\"'+url+'\" width="200" height="600">'
+            new_resp+='</div>\n'
+
+
+        else:
+            new_resp+=line+'\n'
+    print("printing new response:")
+    print(new_resp)
+    return new_resp
+
 
 
 

@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 from flask import Flask, render_template 
 from filters import all_generated_urls
 
-app = Flask(__name__)
+# app = Flask(__name__)
 
 def find_image_class(url):
     response = requests.get(url)
@@ -33,23 +33,24 @@ def find_image_class(url):
     print(img_urls)
     return img_urls
 
-@app.route('/')
+# @app.route('/')
 def identify_image_class():
     all_image_urls = []
     for i in all_generated_urls:
         url = i  # Use the actual URL here
         img_urls = []
         result = find_image_class(url)
-    
-        # if isinstance(result, tuple):
-        #     img_urls = result
+        
+            # if isinstance(result, tuple):
+            #     img_urls = result
         if result:
-            # for item in result:
-                all_image_urls.append(result)
+                # for item in result:
+                    all_image_urls.append(result)
     print("printing all urls:")
     print(all_image_urls)
+    return(all_image_urls)
 
-    return render_template('index.html', image_urls=all_image_urls)
+# return render_template('index.html', image_urls=all_image_urls)
 
-if __name__ == '__main__':
-    app.run(debug=True)
+# if __name__ == '__main__':
+    # app.run(debug=True)

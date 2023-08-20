@@ -77,3 +77,5 @@ for i in filtered_list:
     flipkart_url = generate_flipkart_url(user_query, filters)
     flipkart_url += "&sort=popularity" 
     all_generated_urls.append(flipkart_url)
+
+print(all_generated_urls)

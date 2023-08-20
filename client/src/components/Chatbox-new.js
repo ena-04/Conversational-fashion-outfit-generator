@@ -277,11 +277,11 @@ function ChatBox() {
                             <p className="text-sm ">
                               {message.text.split("\n").map((i) => {
                                 return (
-                                  <p>
+                                  <div className="">
                                     <div
                                       dangerouslySetInnerHTML={{ __html: i }}
                                     />
-                                  </p>
+                                  </div>
                                 );
                               })}
                             </p>
