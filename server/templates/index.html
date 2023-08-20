@@ -5,13 +5,13 @@
 </head>
 <body>
     <h1>Image Class Identifier</h1>
-    <h2>Image Class: {{ image_class }}</h2>
+    <!-- <h2>Image Class: {{ image_class }}</h2> -->
 
     <h2>Top 5 Images:</h2>
     <div>
         {% if image_urls %}
             {% for img_url in image_urls %}
-                <img src="{{ img_url }}" class="{{ image_class }}" alt="Image">
+                <img src="{{ img_url }}" alt="Image">
             {% endfor %}
         {% else %}
             No images found.

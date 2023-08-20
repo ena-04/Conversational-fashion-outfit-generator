@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 from flask import Flask, render_template 
-from filters import flipkart_url
+from filters import all_generated_urls
 
 app = Flask(__name__)
 
@@ -25,27 +25,31 @@ def find_image_class(url):
     #     img_urls = []
         
     if img_tags:
-            img_class = img_tags[0].get('class')
+            # img_class = img_tags[0].get('class')
             img_urls = [img['src'] for img in img_tags[:5]]  # Get top 5 image URLs
 
             for image in img_urls:
                  print(image)
         
-    return img_class, img_urls
+    return img_urls
 
 @app.route('/')
 def identify_image_class():
-    url = flipkart_url  # Use the actual URL here
+    all_image_urls = []
+    for i in all_generated_urls:
+        url = i  # Use the actual URL here
     
-    result = find_image_class(url)
+        result = find_image_class(url)
     
-    if isinstance(result, tuple) and len(result) == 2:
-        img_class, img_urls = result
-    else:
-        img_class = result
-        img_urls = []
+        if isinstance(result, tuple) and len(result) == 2:
+             img_urls = result
+        else:
+            # img_class = result
+            img_urls = []
+        
+        all_image_urls.append(img_urls)
 
-    return render_template('index.html', image_class=img_class, image_urls=img_urls)
+    return render_template('index.html', image_urls=all_image_urls)
 
 if __name__ == '__main__':
     app.run(debug=True)

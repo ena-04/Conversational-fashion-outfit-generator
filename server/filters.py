@@ -3,6 +3,7 @@ import nltk
 from nltk.tokenize import word_tokenize
 from collections import defaultdict
 from urllib.parse import quote
+from filter_stopwords import filtered_list
 # from flipkart_links import generate_flipkart_url
 
 
@@ -37,13 +38,13 @@ def capitalize_first_letter(keyword_list):
         capitalized_keywords.append(capitalized_keyword)
     return capitalized_keywords
 
+all_generated_urls = []
 # Example user query
-user_query = input("Please Enter:")
+for i in filtered_list:
+    user_query = i
 
-
-
-# Keyword lists for different categories
-keyword_lists = {
+    # Keyword lists for different categories
+    keyword_lists = {
     "gender":["Men","Women","Boys","Girls","Baby Boys","Unisex","Baby Boys & Baby Girls","Boys & Girls","Baby Girls"],
     "occasion": ["party", "casual", "formal", "beach", "wedding", "lounge", "sports","festive"],
     "color": ["Black","Pink","Multicolor","Blue","Yellow","White","Beige","Brown","Dark Blue","Dark Green","Gold","Green","Grey","Light Blue","Light Green","Maroon","Orange","Purple","Red","Cream","Magenta","Mustard","Silver","Khaki","Dark Grey"
@@ -57,22 +58,22 @@ keyword_lists = {
     "pattern": ["Solid","Washed","Ethnic Motifs","Ombre","Chevron/Zig Zag","Animal Print","Checkered","Colorblock","Embellished","Embroidered","Floral Print","Geometric Print","Graphic Print","Polka Print","Printed","Self Design","Striped","Tie & Dye","Woven Design","Military Camouflage","Color Block","Dyed/Ombre","Applique","Chevron","Embossed","Houndstooth","Lace","Laser Cut","Paisley","Tribal","Woven","solid", "floral", "striped", "chevron","embroidered"],
 
     "neck": ["v-neck", "scoop neck", "round neck", "boat", "halter neck", "sweetheart neck","u-shaped","sphagetti","choker neck","asymmetric","high neck","keyhole","ruffle","square"]
-}
+    }
 
-# Extracted keywords
-extracted_keywords = extract_keywords(user_query, keyword_lists)
-print("Extracted Keywords:", extracted_keywords)
+    # Extracted keywords
+    extracted_keywords = extract_keywords(user_query, keyword_lists)
+    print("Extracted Keywords:", extracted_keywords)
 
-# Capitalize the extracted keywords
-capitalized_keywords = {category: capitalize_first_letter(values) for category, values in extracted_keywords.items()}
+    # Capitalize the extracted keywords
+    capitalized_keywords = {category: capitalize_first_letter(values) for category, values in extracted_keywords.items()}
 
-filters = []
+    filters = []
 
-for category, values in capitalized_keywords.items():
-    if values:
-        encoded_values = [quote(value) for value in values]
-        filters.append(f"p%5B%5D=facets.{category}%255B%255D%3D{','.join(encoded_values)}")
+    for category, values in capitalized_keywords.items():
+        if values:
+            encoded_values = [quote(value) for value in values]
+            filters.append(f"p%5B%5D=facets.{category}%255B%255D%3D{','.join(encoded_values)}")
 
-flipkart_url = generate_flipkart_url(user_query, filters)
-flipkart_url += "&sort=popularity" 
-print("Generated Flipkart URL:", flipkart_url)
+    flipkart_url = generate_flipkart_url(user_query, filters)
+    flipkart_url += "&sort=popularity" 
+    all_generated_urls.append(flipkart_url)
