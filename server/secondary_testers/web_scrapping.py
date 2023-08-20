@@ -2,11 +2,12 @@ import requests
 from bs4 import BeautifulSoup
 from urllib.parse import unquote
 from flask import Flask, render_template
-from filters import flipkart_url
+# from filters import flipkart_url
 
 app = Flask(__name__)
 
 def scrape_flipkart():
+    flipkart_url=
     base_url = flipkart_url  # Use the Flipkart URL from filters.py
     response = requests.get(base_url)
 
