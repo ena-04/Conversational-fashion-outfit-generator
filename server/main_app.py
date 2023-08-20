@@ -238,15 +238,20 @@ def get_answer_bard(prompt):
     bard_response=output
 
 
-    items = []
+    item_list = []
     lines = output.split('\n')
 
     for line in lines:
         line = line.strip()
         if line.startswith('*'):
-            items.append(line.split('*')[1].strip().split(':')[1].strip())
+            # output.append(line)
+            item_parts = line.split(':*')
+            if len(item_parts) > 1:
+                item_list.append(item_parts[1].strip())
+            else:
+                item_list.append(line.split('*')[1].strip())
 
-    print(items)
+    print(item_list)
 
 
     lines = bard_response.split("\n")
