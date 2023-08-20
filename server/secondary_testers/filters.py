@@ -56,7 +56,7 @@ keyword_lists = {
 
     "pattern": ["Solid","Washed","Ethnic Motifs","Ombre","Chevron/Zig Zag","Animal Print","Checkered","Colorblock","Embellished","Embroidered","Floral Print","Geometric Print","Graphic Print","Polka Print","Printed","Self Design","Striped","Tie & Dye","Woven Design","Military Camouflage","Color Block","Dyed/Ombre","Applique","Chevron","Embossed","Houndstooth","Lace","Laser Cut","Paisley","Tribal","Woven","solid", "floral", "striped", "chevron","embroidered"],
 
-    "neck": ["v-neck", "scoop", "round", "boat", "halter", "sweetheart","u-shaped","sphagetti","choker","asymmetric","high","keyhole","ruffle","square"]
+    "neck": ["v-neck", "scoop neck", "round neck", "boat", "halter neck", "sweetheart neck","u-shaped","sphagetti","choker neck","asymmetric","high neck","keyhole","ruffle","square"]
 }
 
 # Extracted keywords
@@ -74,4 +74,5 @@ for category, values in capitalized_keywords.items():
         filters.append(f"p%5B%5D=facets.{category}%255B%255D%3D{','.join(encoded_values)}")
 
 flipkart_url = generate_flipkart_url(user_query, filters)
+flipkart_url += "&sort=popularity" 
 print("Generated Flipkart URL:", flipkart_url)

@@ -1,23 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Image Search Results</title>
+    <title>Image Class Identifier</title>
 </head>
 <body>
-    <h1>Image Search Results</h1>
-    
-    {% for result in results %}
-    <h2>{{ result.query }}</h2>
+    <h1>Image Class Identifier</h1>
+    <h2>Image Class: {{ image_class }}</h2>
+
+    <h2>Top 5 Images:</h2>
     <div>
-        {% for image in result.images %}
-        <img src="{{ image }}" alt="Image">
-        <br>
-        {% endfor %}
-        {% for link in result.prod_links %}
-        <a href="{{ link }}" target="_blank">{{ link }}</a>
-        <br>
-        {% endfor %}
+        {% if image_urls %}
+            {% for img_url in image_urls %}
+                <img src="{{ img_url }}" class="{{ image_class }}" alt="Image">
+            {% endfor %}
+        {% else %}
+            No images found.
+        {% endif %}
     </div>
-    {% endfor %}
 </body>
 </html>
